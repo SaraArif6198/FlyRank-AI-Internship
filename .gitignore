@@ -1,0 +1,20 @@
+# Dependency & build directories
+node_modules/
+dist/
+
+# Private credentials and databases
+.env
+*.db
+*.sqlite
+
+# Private project data & assets
+**/data/
+**/context.md
+**/thumbnail.png
+**/*thumbnail*
+
+# AI Agent Configs
+.agents/
+.claude/
+.gemini/
+

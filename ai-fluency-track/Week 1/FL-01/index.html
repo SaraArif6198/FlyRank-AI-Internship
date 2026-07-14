@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FL-01 AI Workflow Audit and Tool Setup</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="container">
+        <!-- Print Header (only visible on printed PDF) -->
+        <div class="print-header">
+            <span>Sara Arif &bull; AI Workflow Audit</span>
+            <span>Document Code: FL-01 &bull; Onboarding Week 1</span>
+        </div>
+
+        <!-- Header -->
+        <header>
+            <span class="subtitle">Assignment FL-01</span>
+            <h1 contenteditable="true" spellcheck="false">AI Workflow Audit and Tool Setup</h1>
+            <div class="meta-info">
+                <div class="meta-item">Track: <strong>General AI Fluency</strong></div>
+                <div class="meta-item">Phase: <strong>Onboarding Week 1</strong></div>
+                <div class="meta-item student-profile">
+                    <img src="sara arif.png" alt="Sara Arif" class="profile-avatar">
+                    <span>Student: <strong contenteditable="true" id="student-name">Sara Arif</strong></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Interactive Controls -->
+        <div class="controls-bar">
+            <div class="control-label">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Double-click text fields to customize this report before printing.</span>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="theme-btn">
+                    <i class="fa-solid fa-sun"></i> Toggle Light Theme (for Print)
+                </button>
+                <button class="btn btn-primary" id="print-btn">
+                    <i class="fa-solid fa-print"></i> Print / Save as PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Section 1: Setup Checklist -->
+        <section id="setup-section">
+            <h2>1 Tool Setup and Academy Progress</h2>
+            <ul class="checklist">
+                <li class="checklist-item">
+                    <input type="checkbox" id="chk-claude" checked>
+                    <label class="checklist-label" for="chk-claude">Claude Anthropic Account Configured</label>
+                    <span class="checklist-desc">Setup active on Claude Free/Pro Tier</span>
+                </li>
+                <li class="checklist-item">
+                    <input type="checkbox" id="chk-chatgpt" checked>
+                    <label class="checklist-label" for="chk-chatgpt">ChatGPT OpenAI Account Active</label>
+                    <span class="checklist-desc">Registered with OpenAI</span>
+                </li>
+                <li class="checklist-item">
+                    <input type="checkbox" id="chk-academy" checked>
+                    <label class="checklist-label" for="chk-academy">Anthropic Academy Enrollment Completed</label>
+                    <span class="checklist-desc">Enrolled in AI Fluency Course</span>
+                </li>
+                <li class="checklist-item">
+                    <input type="checkbox" id="chk-module" checked>
+                    <label class="checklist-label" for="chk-module">Completed Module 1 Framework and Foundations</label>
+                    <span class="checklist-desc">First certification badge unlocked</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Section 2: Task Classification Audit -->
+        <section id="audit-section">
+            <h2>2 Workflow Audit</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">#</th>
+                            <th style="width: 35%;">Recurring Weekly Task</th>
+                            <th style="width: 25%;">Classification</th>
+                            <th style="width: 35%;">One-Line Rationale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td contenteditable="true">Writing complex SQL migrations for DG Cement Work Tracker</td>
+                            <td><span class="badge badge-collaborate">Collaborate with AI</span></td>
+                            <td contenteditable="true">I define the target schema requirements, and AI suggests correct syntax and constraints for MySQL.</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td contenteditable="true">Debugging LangGraph StateGraph flow and thread isolation in AURA</td>
+                            <td><span class="badge badge-collaborate">Collaborate with AI</span></td>
+                            <td contenteditable="true">Diagnosing concurrency issues in SQLite checkpointers requires human system verification, while AI helps brainstorm edge cases.</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td contenteditable="true">Implementing compiler optimization passes (e.g., in SQL2Pandas)</td>
+                            <td><span class="badge badge-just-me">Just Me</span></td>
+                            <td contenteditable="true">Compiler code generation and exact AST node manipulation require deep conceptual logic and have zero tolerance for AI error.</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td contenteditable="true">Drafting narrative text / documentation for research papers</td>
+                            <td><span class="badge badge-collaborate">Collaborate with AI</span></td>
+                            <td contenteditable="true">AI helps structure descriptions and refine vocabulary, but the technical accuracy and engineering details must come from me.</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td contenteditable="true">Generating sample CSV/SQL datasets to test the DataSage graph</td>
+                            <td><span class="badge badge-automate">Fully Automate</span></td>
+                            <td contenteditable="true">Creating mock tabular data with outliers and nulls is a highly structured, rule-based task perfect for scripting.</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td contenteditable="true">Writing boilerplate FastAPI routes and Pydantic schemas</td>
+                            <td><span class="badge badge-delegate">Delegate with Review</span></td>
+                            <td contenteditable="true">API endpoint structures are standard boilerplate that AI writes in seconds, but I must review data shapes for correctness.</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td contenteditable="true">Resolving CatBoost model class imbalance using SMOTE</td>
+                            <td><span class="badge badge-collaborate">Collaborate with AI</span></td>
+                            <td contenteditable="true">I define the evaluation metric (minority recall) and model features, while AI helps write the tuning code boilerplate.</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td contenteditable="true">Creating custom Plotly charting themes (Space Mono/Archivo)</td>
+                            <td><span class="badge badge-delegate">Delegate with Review</span></td>
+                            <td contenteditable="true">Plotly layout configurations are tedious to write manually, but easily generated by AI and verified visually in the UI.</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td contenteditable="true">Negotiating feature scope and manual bookkeeping workflows with the DG Cement site manager</td>
+                            <td><span class="badge badge-just-me">Just Me</span></td>
+                            <td contenteditable="true">Building professional relationships and translating raw human needs into software scope requires human empathy and alignment.</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td contenteditable="true">Designing custom CSS card styles for the AURA chat interface</td>
+                            <td><span class="badge badge-delegate">Delegate with Review</span></td>
+                            <td contenteditable="true">Creating specific glassmorphic styles is fast with AI generation, but requires my design taste and inspection to finalize.</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td contenteditable="true">Refining mathematically critical 26-day payroll formula</td>
+                            <td><span class="badge badge-just-me">Just Me</span></td>
+                            <td contenteditable="true">Payroll logic must perfectly match the contractor's manual calculations to avoid labour disputes; there is no room for AI error.</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td contenteditable="true">Troubleshooting 404 model-not-found errors or rate limits</td>
+                            <td><span class="badge badge-delegate">Delegate with Review</span></td>
+                            <td contenteditable="true">AI can parse error logs and recommend fallback configuration adjustments, which I then apply and test.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 3: Claude Custom Instructions -->
+        <section id="claude-section">
+            <h2>3 Claude Project Custom Instructions</h2>
+            <div class="claude-box">
+                <div class="code-header">
+                    <span class="code-title">Instruction Profile (Markdown)</span>
+                    <button class="btn btn-secondary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;" id="copy-btn">
+                        <i class="fa-regular fa-copy"></i> Copy Instructions
+                    </button>
+                </div>
+                <pre id="custom-instructions-text">
+[PROFILE & ROLE]
+You are interacting with Sara Arif, a Computer Science student (CGPA 3.85, ranked 2nd) and AI Developer. She specializes in building multi-agent AI systems (LangGraph), compiler toolchains (UrduPy, SQL2Pandas), data systems, and full-stack software architectures (e.g., the PHP/MySQL DG Cement Work Tracker).
+
+[TONE & STYLE PREFERENCES]
+- Be extremely concise, technical, and code-first.
+- Provide clean, production-ready code with minimal explanatory text unless asked.
+- Avoid conversational filler (e.g., "Sure, I can help with that!", "Here is the code:").
+- Structure responses with clear headings, bullet points, and code comments explaining design decisions.
+
+[DEVELOPMENT STANDARDS]
+- Python: Enforce LangGraph StateGraph practices, FastAPI modular routes, and clean Streamlit UI styling.
+- PHP/MySQL: Prioritize database security (always use parameterized queries to prevent SQL injection).
+- Compilers: Ensure correct AST parsing, tokenization rules, and formal optimization passes.
+
+[CURRENT GOALS]
+- Completing the General AI Fluency certification track.
+- Scaling multi-agent EDA systems (DataSage) and optimizing LLM chat interfaces (AURA).
+- Deploying robust, offline-capable PWAs for field workforce management.
+                </pre>
+            </div>
+        </section>
+
+        <!-- Section 4: Screenshot Evidence -->
+        <section id="evidence-section">
+            <h2>4 Program Verification and Tool Evidence</h2>
+            <div class="evidence-grid">
+                <!-- Claude Evidence -->
+                <div class="browser-frame">
+                    <div class="browser-bar">
+                        <div class="browser-dots">
+                            <span class="browser-dot red"></span>
+                            <span class="browser-dot yellow"></span>
+                            <span class="browser-dot green"></span>
+                        </div>
+                        <div class="browser-address">claude.ai/project/flyrank</div>
+                    </div>
+                    <div class="screenshot-area" id="drop-zone-1">
+                        <div class="screenshot-placeholder" id="placeholder-content-1">
+                            <i class="fa-solid fa-gears" style="color: var(--primary-light);"></i>
+                            <p>Claude Project Instructions</p>
+                            <span>Drag screenshot here or click to browse</span>
+                        </div>
+                        <img id="screenshot-preview-1" class="preview-img" alt="Claude Project Screenshot">
+                        <input type="file" id="file-input-1" accept="image/*">
+                    </div>
+                </div>
+
+                <!-- Academy Evidence -->
+                <div class="browser-frame">
+                    <div class="browser-bar">
+                        <div class="browser-dots">
+                            <span class="browser-dot red"></span>
+                            <span class="browser-dot yellow"></span>
+                            <span class="browser-dot green"></span>
+                        </div>
+                        <div class="browser-address">academy.anthropic.com</div>
+                    </div>
+                    <div class="screenshot-area" id="drop-zone-2">
+                        <div class="screenshot-placeholder" id="placeholder-content-2">
+                            <i class="fa-solid fa-graduation-cap" style="color: var(--accent);"></i>
+                            <p>Anthropic Academy & ChatGPT Setup</p>
+                            <span>Drag certificate/progress here or click</span>
+                        </div>
+                        <img id="screenshot-preview-2" class="preview-img" alt="Anthropic Academy Screenshot">
+                        <input type="file" id="file-input-2" accept="image/*">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Target Tasks for FL-02 to FL-04 -->
+        <section id="targets-section">
+            <h2>5 Target Tasks and Success Definitions</h2>
+            <div class="tasks-grid">
+                <div class="task-card">
+                    <h3>1 SQL Migrations for DG Cement</h3>
+                    <div class="task-card-meta">
+                        <span class="badge badge-collaborate">Collaborate</span>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                        Writing and running migration files to introduce new audit log tables and database constraints.
+                    </p>
+                    <div class="success-def">
+                        <h4>Success Definition</h4>
+                        <ul>
+                            <li>Schema changes run without syntax errors.</li>
+                            <li>All existing production rows are preserved with no data loss.</li>
+                            <li>Execution completes in less than 500 milliseconds on a 10000 row database.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-card">
+                    <h3>2 AST Optimization in SQL2Pandas</h3>
+                    <div class="task-card-meta">
+                        <span class="badge badge-just-me">Just Me</span>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                        Writing AST manipulation logic for dead-code elimination and projection pruning in the transpiler.
+                    </p>
+                    <div class="success-def">
+                        <h4>Success Definition</h4>
+                        <ul>
+                            <li>The transpiler passes all unit tests.</li>
+                            <li>Simplifies a 5 JOIN SQL query AST by removing at least 2 redundant nodes.</li>
+                            <li>No regression bugs are introduced in the generated Pandas queries.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-card">
+                    <h3>3 StateGraph Nodes in DataSage</h3>
+                    <div class="task-card-meta">
+                        <span class="badge badge-collaborate">Collaborate</span>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                        Setting up linear pipeline nodes (analysis, narrative, viz) and ensuring correct state transitions.
+                    </p>
+                    <div class="success-def">
+                        <h4>Success Definition</h4>
+                        <ul>
+                            <li>The entire pipeline executes in less than 15 seconds.</li>
+                            <li>Gracefully handles empty or corrupted CSV files by returning structured error states without crashing.</li>
+                            <li>Output JSON matches the frontend Pydantic schema structure.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>FL-01 AI Workflow Audit and Tool Setup &bull; Generated for FlyRank Track Evaluation</p>
+        </footer>
+
+        <!-- Print Footer (only visible on printed PDF) -->
+        <div class="print-footer">
+            <span>Prepared for FlyRank Evaluation Track</span>
+            <span id="print-date"></span>
+        </div>
+    </div>
+
+    <!-- Scripting for Interactivity -->
+    <script>
+        const themeBtn = document.getElementById('theme-btn');
+        const printBtn = document.getElementById('print-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const customInstructionsText = document.getElementById('custom-instructions-text');
+        const dropZone1 = document.getElementById('drop-zone-1');
+        const fileInput1 = document.getElementById('file-input-1');
+        const previewImg1 = document.getElementById('screenshot-preview-1');
+        const placeholderContent1 = document.getElementById('placeholder-content-1');
+
+        const dropZone2 = document.getElementById('drop-zone-2');
+        const fileInput2 = document.getElementById('file-input-2');
+        const previewImg2 = document.getElementById('screenshot-preview-2');
+        const placeholderContent2 = document.getElementById('placeholder-content-2');
+
+        // Theme Toggle
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            themeBtn.innerHTML = isLight 
+                ? '<i class="fa-solid fa-moon"></i> Toggle Dark Theme' 
+                : '<i class="fa-solid fa-sun"></i> Toggle Light Theme (for Print)';
+        });
+
+        // Print Report
+        printBtn.addEventListener('click', () => {
+            const wasLight = document.body.classList.contains('light-theme');
+            if (!wasLight) {
+                document.body.classList.add('light-theme');
+            }
+            window.print();
+            if (!wasLight) {
+                document.body.classList.remove('light-theme');
+            }
+        });
+
+        // Copy Code
+        copyBtn.addEventListener('click', () => {
+            const codeText = customInstructionsText.textContent.trim();
+            navigator.clipboard.writeText(codeText).then(() => {
+                const originalHtml = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                copyBtn.style.background = 'rgba(16, 185, 129, 0.2)';
+                copyBtn.style.color = '#10b981';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHtml;
+                    copyBtn.style.background = '';
+                    copyBtn.style.color = '';
+                }, 2000);
+            });
+        });
+
+        // Setup Drop Zone 1
+        setupUpload(dropZone1, fileInput1, previewImg1, placeholderContent1);
+        // Setup Drop Zone 2
+        setupUpload(dropZone2, fileInput2, previewImg2, placeholderContent2);
+
+        function setupUpload(dropZone, fileInput, previewImg, placeholder) {
+            dropZone.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--primary-light)';
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.style.borderColor = 'var(--border-color)';
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--border-color)';
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFile(files[0], previewImg, placeholder, dropZone);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const files = e.target.files;
+                if (files.length > 0) {
+                    handleFile(files[0], previewImg, placeholder, dropZone);
+                }
+            });
+        }
+
+        function handleFile(file, previewImg, placeholder, dropZone) {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                    placeholder.style.display = 'none';
+                    dropZone.style.padding = '0.5rem';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('Please upload an image file (PNG, JPG, etc.).');
+            }
+        }
+        document.getElementById('print-date').textContent = "Generated on " + new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+    </script>
+</body>
+</html>

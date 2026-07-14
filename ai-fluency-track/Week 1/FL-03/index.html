@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FL-03 — Draw the Path: Portfolio Sitemap + Toolkit | Sara Arif</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ============ FL-03 professional additions ============ */
+
+        /* Evaluator summary — the "grab by checker" section */
+        .eval-banner {
+            background: linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(217,119,6,0.08) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow);
+        }
+        .eval-banner h2 { border: none; padding-left: 0; margin-bottom: 1rem; font-size: 1.3rem; }
+        .eval-banner h2 i { color: var(--accent); margin-right: 0.5rem; }
+        .deliverable-map { width: 100%; border-collapse: collapse; }
+        .deliverable-map th, .deliverable-map td { padding: 0.6rem 0.8rem; font-size: 0.88rem; border-bottom: 1px solid var(--border-color); text-align: left; }
+        .deliverable-map th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+        .deliverable-map a { color: var(--primary-light); text-decoration: none; font-weight: 600; }
+        .deliverable-map a:hover { text-decoration: underline; }
+        .status-pill {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.2rem 0.65rem; border-radius: 20px;
+            font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        .status-done { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.35); }
+        .status-embed { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.35); }
+
+        /* Anchor line */
+        .anchor-line {
+            background: rgba(217, 119, 6, 0.08);
+            border: 1px solid rgba(217, 119, 6, 0.3);
+            border-left: 4px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 1rem 1.4rem;
+            font-size: 0.92rem;
+            margin-bottom: 1.75rem;
+        }
+        .anchor-line strong { color: var(--accent); }
+        .anchor-line .anchor-triple { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.7rem; }
+        .anchor-chip {
+            border: 1px solid var(--border-color); border-radius: 6px;
+            padding: 0.4rem 0.8rem; font-size: 0.8rem; background: rgba(255,255,255,0.03);
+        }
+        .anchor-chip b { color: var(--accent); text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.06em; display: block; }
+
+        /* Sitemap flow */
+        .sitemap-flow { display: flex; flex-direction: column; gap: 0; align-items: center; margin-top: 1rem; }
+        .flow-node {
+            width: 100%; max-width: 680px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary-light);
+            border-radius: var(--radius);
+            padding: 1rem 1.4rem;
+            position: relative;
+        }
+        .flow-node h3 { font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: 0.25rem; }
+        .flow-node .node-num {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 1.6rem; height: 1.6rem; border-radius: 50%;
+            background: var(--accent); color: #fff; font-size: 0.8rem; font-weight: 700;
+            margin-right: 0.55rem; font-family: var(--font-body);
+        }
+        .flow-node .stage-tag {
+            position: absolute; top: 0.9rem; right: 1.2rem;
+            font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--text-muted); border: 1px solid var(--border-color);
+            padding: 0.15rem 0.5rem; border-radius: 4px;
+        }
+        .flow-node p { font-size: 0.88rem; color: var(--text-muted); margin-right: 5.5rem; }
+        .flow-node .earns { font-size: 0.82rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border-color); color: var(--text-main); }
+        .flow-node .earns strong { color: var(--accent); text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.06em; }
+        .flow-node.revised { border-left-color: var(--accent); }
+        .flow-node.revised::after {
+            content: "REVISED AFTER PRESSURE-TEST";
+            position: absolute; bottom: 0.7rem; right: 1.2rem;
+            font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em;
+            color: var(--accent); border: 1px solid var(--accent);
+            padding: 0.12rem 0.45rem; border-radius: 4px; opacity: 0.9;
+        }
+        .flow-arrow { color: var(--text-muted); font-size: 1.05rem; padding: 0.3rem 0; }
+
+        /* Cut list */
+        .cut-list { margin-top: 1.75rem; }
+        .cut-list h3 { font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 0.6rem; }
+        .cut-item {
+            display: flex; gap: 0.8rem; align-items: baseline;
+            padding: 0.55rem 0; border-bottom: 1px dashed var(--border-color);
+            font-size: 0.9rem;
+        }
+        .cut-item:last-child { border-bottom: none; }
+        .cut-item .fa-scissors { color: #ef4444; flex-shrink: 0; }
+        .cut-item span { color: var(--text-muted); }
+
+        /* Revision callout */
+        .revision-note {
+            display: flex; gap: 1rem; align-items: flex-start;
+            background: rgba(59,130,246,0.07);
+            border: 1px solid rgba(59,130,246,0.25);
+            border-radius: var(--radius);
+            padding: 1rem 1.3rem; margin: 1.5rem 0 0.5rem 0;
+            font-size: 0.88rem;
+        }
+        .revision-note i { color: var(--primary-light); margin-top: 0.2rem; }
+
+        /* Change box */
+        .change-box {
+            border: 2px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 1.2rem 1.5rem;
+            margin-top: 1.75rem;
+            background: rgba(217, 119, 6, 0.06);
+        }
+        .change-box h4 { color: var(--accent); text-transform: uppercase; font-size: 0.85rem; margin-bottom: 0.5rem; letter-spacing: 0.05em; }
+        .change-box p { font-size: 0.95rem; line-height: 1.65; }
+
+        /* Evidence grids */
+        .evidence-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        @media (max-width: 768px) { .evidence-grid-2 { grid-template-columns: 1fr; } }
+
+        /* Multi-screenshot gallery for pressure test */
+        .gallery-controls {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1rem; flex-wrap: wrap; gap: 0.6rem;
+        }
+        .gallery-hint { font-size: 0.82rem; color: var(--text-muted); }
+        .multi-drop {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.6rem;
+            text-align: center; cursor: pointer;
+            transition: border-color 0.2s ease, background 0.2s ease;
+            background: rgba(255,255,255,0.01);
+        }
+        .multi-drop:hover { border-color: var(--accent); background: rgba(217,119,6,0.03); }
+        .multi-drop i { font-size: 2rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; }
+        .multi-drop p { font-weight: 500; font-size: 0.92rem; }
+        .multi-drop span { font-size: 0.78rem; color: var(--text-muted); }
+        .gallery {
+            display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin-top: 1.25rem;
+        }
+        .gallery-item {
+            border: 1px solid var(--border-color); border-radius: 8px;
+            overflow: hidden; background: var(--bg-card); position: relative;
+        }
+        .gallery-item .g-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.45rem 0.9rem;
+            background: rgba(0,0,0,0.18); border-bottom: 1px solid var(--border-color);
+            font-size: 0.75rem; color: var(--text-muted);
+        }
+        body.light-theme .gallery-item .g-bar { background: #f1f5f9; }
+        .gallery-item .g-bar .g-label { font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+        .gallery-item .g-remove {
+            background: none; border: none; color: #ef4444; cursor: pointer;
+            font-size: 0.8rem; padding: 0.15rem 0.4rem;
+        }
+        .gallery-item img { width: 100%; display: block; }
+
+        /* Fill-state indicators for evaluator */
+        .evidence-label {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+            color: var(--text-muted); margin: 1.75rem 0 0.6rem 0;
+        }
+        .evidence-label .req { color: var(--accent); font-size: 0.68rem; border: 1px solid var(--accent); padding: 0.1rem 0.45rem; border-radius: 4px; }
+
+        /* ═══════════════════════════════════════════════════════════
+           PRINT — professional paginated report
+           Overrides the FL-01 base stylesheet (fixed table widths,
+           forced section breaks, zero page margin) with a clean layout:
+           Page 1  cover: title + evaluator summary
+           Page 2  sitemap + cut list
+           Page 3  toolkit + project instructions
+           Page 4+ evidence (sketch, project, pressure-test gallery)
+           Last    change record + self-check
+           ═══════════════════════════════════════════════════════════ */
+        @media print {
+            @page { size: A4; margin: 1.5cm 1.4cm 1.7cm 1.4cm; }
+
+            html, body {
+                background: #ffffff !important;
+                color: #1e293b !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                font-size: 9.5pt !important;
+                line-height: 1.5 !important;
+            }
+
+            /* ---- kill screen chrome ---- */
+            .bg-glow, .bg-glow-2, .controls-bar, footer,
+            .multi-drop, .gallery-controls, .g-remove,
+            .screenshot-placeholder { display: none !important; }
+
+            .container { max-width: 100% !important; margin: 0 !important; }
+
+            /* ---- neutralize FL-01 base print rules ---- */
+            section {
+                background: none !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 0 1.4rem 0 !important;
+                page-break-inside: auto !important;   /* base css forces avoid → overflow bug */
+                break-inside: auto !important;
+                backdrop-filter: none !important;
+            }
+            table { table-layout: auto !important; }
+            /* undo the FL-01 global 4-column widths */
+            th:nth-child(1), td:nth-child(1),
+            th:nth-child(2), td:nth-child(2),
+            th:nth-child(3), td:nth-child(3),
+            th:nth-child(4), td:nth-child(4) { width: auto !important; }
+
+            /* ---- document header ---- */
+            .print-header {
+                display: flex !important;
+                justify-content: space-between;
+                border-bottom: 2px solid #1e3a8a;
+                padding-bottom: 5pt;
+                margin-bottom: 14pt;
+                font-size: 7.5pt;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                color: #475569;
+            }
+            .print-footer {
+                display: flex !important;
+                justify-content: space-between;
+                border-top: 1px solid #cbd5e1;
+                padding-top: 5pt;
+                margin-top: 18pt;
+                font-size: 7.5pt;
+                color: #64748b;
+            }
+
+            header { margin-bottom: 12pt !important; padding-bottom: 10pt !important; border-bottom: 1px solid #e2e8f0 !important; text-align: left !important; }
+            h1 {
+                font-size: 20pt !important;
+                background: none !important;
+                -webkit-text-fill-color: initial !important;
+                color: #0f172a !important;
+                margin-bottom: 2pt !important;
+                letter-spacing: -0.02em !important;
+            }
+            .subtitle { color: #b45309 !important; font-size: 9pt !important; letter-spacing: 0.18em !important; }
+            .meta-info { justify-content: flex-start !important; gap: 14pt !important; margin-top: 4pt !important; font-size: 8.5pt !important; color: #475569 !important; }
+            .meta-info strong { color: #0f172a !important; }
+            .profile-avatar { border-color: #b45309 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+            h2 {
+                font-size: 12.5pt !important;
+                color: #0f172a !important;
+                border-left: none !important;
+                border-bottom: 1.5px solid #1e3a8a !important;
+                padding: 0 0 4pt 0 !important;
+                margin-bottom: 10pt !important;
+                page-break-after: avoid !important;
+            }
+
+            /* ---- page plan ---- */
+            #sitemap-section  { page-break-before: always !important; break-before: page !important; }
+            #toolkit-section  { page-break-before: always !important; break-before: page !important; }
+            #claude-section   { page-break-before: avoid !important; break-before: auto !important; margin-top: 14pt !important; }
+            #evidence-section { page-break-before: always !important; break-before: page !important; }
+            #check-section    { page-break-before: avoid !important; margin-top: 14pt !important; }
+
+            /* ---- evaluator summary (page 1) ---- */
+            .eval-banner {
+                background: #ffffff !important;
+                border: 1.5px solid #1e3a8a !important;
+                border-radius: 6px !important;
+                padding: 12pt 14pt !important;
+                margin-bottom: 0 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid !important;
+            }
+            .eval-banner h2 { border-bottom: 1px solid #e2e8f0 !important; font-size: 11.5pt !important; }
+            .deliverable-map { width: 100% !important; }
+            .deliverable-map th, .deliverable-map td {
+                font-size: 8pt !important;
+                padding: 5pt 6pt !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+                vertical-align: top !important;
+            }
+            .deliverable-map th { color: #1e3a8a !important; font-size: 7pt !important; }
+            .deliverable-map th:nth-child(1), .deliverable-map td:nth-child(1) { width: 44% !important; }
+            .deliverable-map th:nth-child(2), .deliverable-map td:nth-child(2) { width: 33% !important; }
+            .deliverable-map th:nth-child(3), .deliverable-map td:nth-child(3) { width: 23% !important; }
+            .deliverable-map a { color: #1e3a8a !important; text-decoration: none !important; }
+            .status-pill {
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+                font-size: 6.5pt !important; padding: 1.5pt 5pt !important;
+            }
+            .status-done  { background: #ecfdf5 !important; color: #047857 !important; border: 0.75pt solid #047857 !important; }
+            .status-embed { background: #eff6ff !important; color: #1d4ed8 !important; border: 0.75pt solid #1d4ed8 !important; }
+
+            /* ---- anchor line ---- */
+            .anchor-line {
+                background: #fffbf5 !important;
+                border: 1pt solid #d6b98c !important;
+                border-left: 3pt solid #b45309 !important;
+                padding: 8pt 10pt !important;
+                font-size: 8.5pt !important;
+                margin-bottom: 10pt !important;
+                page-break-inside: avoid !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .anchor-chip { background: #ffffff !important; border: 0.75pt solid #cbd5e1 !important; font-size: 8pt !important; padding: 4pt 7pt !important; }
+            .anchor-chip b { color: #b45309 !important; }
+
+            /* ---- sitemap flow (compact so page 2 holds it) ---- */
+            .sitemap-flow { margin-top: 4pt !important; }
+            .flow-node {
+                max-width: 100% !important;
+                background: #ffffff !important;
+                border: 1pt solid #94a3b8 !important;
+                border-left: 3pt solid #1e3a8a !important;
+                border-radius: 4px !important;
+                padding: 6pt 10pt !important;
+                page-break-inside: avoid !important;
+            }
+            .flow-node.revised { border-left-color: #b45309 !important; }
+            .flow-node h3 { font-size: 10pt !important; margin-bottom: 1pt !important; }
+            .flow-node .node-num {
+                width: 11pt !important; height: 11pt !important; font-size: 7pt !important;
+                background: #1e3a8a !important; color: #ffffff !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .flow-node.revised .node-num { background: #b45309 !important; }
+            .flow-node p { font-size: 8pt !important; color: #475569 !important; margin-right: 70pt !important; }
+            .flow-node .earns { font-size: 7.5pt !important; margin-top: 3pt !important; padding-top: 3pt !important; border-top: 0.75pt dashed #cbd5e1 !important; color: #1e293b !important; }
+            .flow-node .earns strong { color: #b45309 !important; }
+            .flow-node .stage-tag { font-size: 6pt !important; color: #64748b !important; border: 0.75pt solid #cbd5e1 !important; top: 6pt !important; right: 8pt !important; }
+            .flow-node.revised::after {
+                font-size: 5.5pt !important; color: #b45309 !important; border-color: #b45309 !important;
+                bottom: 5pt !important; right: 8pt !important;
+            }
+            .flow-arrow { font-size: 8pt !important; padding: 1.5pt 0 !important; color: #94a3b8 !important; }
+
+            .cut-list { margin-top: 10pt !important; page-break-inside: avoid !important; }
+            .cut-list h3 { font-size: 10pt !important; }
+            .cut-item { font-size: 8pt !important; padding: 3pt 0 !important; border-bottom: 0.75pt dashed #cbd5e1 !important; }
+            .cut-item span { color: #475569 !important; }
+            .revision-note {
+                background: #f0f6ff !important; border: 1pt solid #93c5fd !important;
+                font-size: 8pt !important; padding: 6pt 9pt !important; margin-top: 8pt !important;
+                page-break-inside: avoid !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+
+            /* ---- toolkit checklist ---- */
+            .checklist-item { padding: 4pt 0 !important; border-bottom: 0.75pt solid #e2e8f0 !important; }
+            .checklist-label { font-size: 9pt !important; color: #0f172a !important; }
+            .checklist-desc { font-size: 7.5pt !important; color: #64748b !important; }
+            .checklist-item input[type="checkbox"] { accent-color: #047857 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+            /* ---- instructions box ---- */
+            .claude-box {
+                background: #f8fafc !important;
+                border: 1pt solid #cbd5e1 !important;
+                padding: 10pt 12pt !important;
+                page-break-inside: avoid !important;
+            }
+            .code-header .btn { display: none !important; }
+            .code-title { color: #1e3a8a !important; font-size: 8pt !important; }
+            pre { color: #1e293b !important; font-size: 7.5pt !important; line-height: 1.45 !important; }
+
+            /* ---- evidence ---- */
+            .evidence-label { font-size: 8.5pt !important; color: #1e293b !important; margin: 12pt 0 4pt 0 !important; page-break-after: avoid !important; }
+            .evidence-label .req { color: #b45309 !important; border-color: #b45309 !important; font-size: 6pt !important; }
+            .evidence-grid-2 { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10pt !important; }
+
+            .browser-frame {
+                border: 1pt solid #94a3b8 !important;
+                border-radius: 4px !important;
+                background: #ffffff !important;
+                box-shadow: none !important;
+                page-break-inside: avoid !important;
+                margin-top: 0 !important;
+            }
+            .browser-bar { background: #f1f5f9 !important; border-bottom: 0.75pt solid #cbd5e1 !important; padding: 4pt 8pt !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .browser-dot { width: 6pt !important; height: 6pt !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .browser-address { background: #ffffff !important; border: 0.75pt solid #cbd5e1 !important; color: #475569 !important; font-size: 6.5pt !important; }
+            .screenshot-area { border: none !important; padding: 4pt !important; background: #ffffff !important; }
+            .preview-img {
+                display: block !important;
+                max-width: 100% !important;
+                max-height: 300pt !important;
+                margin: 0 auto !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+            /* hide an evidence frame entirely if no image was added */
+            .browser-frame:has(img.preview-img:not([src])) { display: none !important; }
+
+            /* pressure-test gallery: one screenshot per row, numbered bars */
+            .gallery { gap: 8pt !important; margin-top: 4pt !important; }
+            .gallery-item {
+                border: 1pt solid #94a3b8 !important;
+                border-radius: 4px !important;
+                background: #ffffff !important;
+                page-break-inside: avoid !important;
+            }
+            .gallery-item .g-bar {
+                background: #f1f5f9 !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+                color: #1e3a8a !important;
+                font-size: 6.5pt !important;
+                padding: 3pt 8pt !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .gallery-item img { max-height: 470pt !important; width: auto !important; max-width: 100% !important; margin: 0 auto !important; object-fit: contain !important; }
+
+            /* ---- change record ---- */
+            .change-box {
+                background: #fffbf5 !important;
+                border: 1.25pt solid #b45309 !important;
+                padding: 9pt 12pt !important;
+                margin-top: 12pt !important;
+                page-break-inside: avoid !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .change-box h4 { color: #b45309 !important; font-size: 8.5pt !important; }
+            .change-box p { font-size: 8.5pt !important; line-height: 1.55 !important; color: #1e293b !important; }
+
+            /* ---- self-check table ---- */
+            #check-section table { width: 100% !important; }
+            #check-section th, #check-section td {
+                font-size: 8.5pt !important;
+                padding: 6pt 8pt !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+                vertical-align: top !important;
+            }
+            #check-section th { color: #1e3a8a !important; }
+            #check-section th:nth-child(1), #check-section td:nth-child(1) { width: 55% !important; }
+            #check-section th:nth-child(2), #check-section td:nth-child(2) { width: 45% !important; }
+            #check-section tbody tr td:first-child { font-weight: 600 !important; color: #0f172a !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="container">
+        <!-- Print Header (only visible on printed PDF) -->
+        <div class="print-header">
+            <span>Sara Arif &bull; Portfolio Sitemap + Toolkit</span>
+            <span>Document Code: FL-03 &bull; Week 1 &bull; Phase: Setup</span>
+        </div>
+
+        <!-- Header -->
+        <header>
+            <span class="subtitle">Assignment FL-03</span>
+            <h1 contenteditable="true" spellcheck="false">Draw the Path: Portfolio Sitemap + Toolkit</h1>
+            <div class="meta-info">
+                <div class="meta-item">Track: <strong>General AI Fluency</strong></div>
+                <div class="meta-item">Week: <strong>1</strong> &bull; Phase: <strong>Setup</strong></div>
+                <div class="meta-item student-profile">
+                    <img src="sara arif.png" alt="Sara Arif" class="profile-avatar">
+                    <span>Student: <strong contenteditable="true" id="student-name">Sara Arif</strong></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Interactive Controls -->
+        <div class="controls-bar">
+            <div class="control-label">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Double-click text to edit &bull; drop images into the evidence zones &bull; then Print / Save as PDF.</span>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="theme-btn">
+                    <i class="fa-solid fa-sun"></i> Toggle Light Theme (for Print)
+                </button>
+                <button class="btn btn-primary" id="print-btn">
+                    <i class="fa-solid fa-print"></i> Print / Save as PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- ═══════ EVALUATOR SUMMARY — everything a checker needs, in one glance ═══════ -->
+        <div class="eval-banner" id="evaluator-summary">
+            <h2><i class="fa-solid fa-clipboard-check"></i>Evaluator Summary — Deliverables &amp; Where to Find Them</h2>
+            <table class="deliverable-map">
+                <thead>
+                    <tr>
+                        <th style="width:42%;">Required deliverable (per brief)</th>
+                        <th style="width:34%;">Location in this document</th>
+                        <th style="width:24%;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sitemap sketch — small, each page earns its place vs claim + action</td>
+                        <td><a href="#sitemap-section">§1 Sitemap</a> + <a href="#evidence-section">§4.1 sketch photo</a></td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> 6 sections, 6 cuts</span></td>
+                    </tr>
+                    <tr>
+                        <td>Free toolkit: Claude, ChatGPT, Gemini, Perplexity accounts</td>
+                        <td><a href="#toolkit-section">§2 Toolkit checklist</a></td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> All 4 active</span></td>
+                    </tr>
+                    <tr>
+                        <td>Claude Project, named for the build, proof statement as custom instructions, tutor role</td>
+                        <td><a href="#claude-section">§3 Instructions</a> + <a href="#evidence-section">§4.2 screenshot</a></td>
+                        <td><span class="status-pill status-embed"><i class="fa-solid fa-image"></i> Evidence embedded</span></td>
+                    </tr>
+                    <tr>
+                        <td>Pressure-test prompt run against the map; output saved</td>
+                        <td><a href="#evidence-section">§4.3 prompt + response screenshots</a></td>
+                        <td><span class="status-pill status-embed"><i class="fa-solid fa-images"></i> Full thread embedded</span></td>
+                    </tr>
+                    <tr>
+                        <td>At least one change noted from the pressure-test</td>
+                        <td><a href="#change-note">§4.4 change record</a> + revised nodes in <a href="#sitemap-section">§1</a></td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> 3 changes applied</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ═══════ Section 1: Sitemap ═══════ -->
+        <section id="sitemap-section">
+            <h2>1 &nbsp;Portfolio Sitemap — Landing → Believing → Acting</h2>
+
+            <div class="anchor-line">
+                <strong><i class="fa-solid fa-anchor"></i> Anchor — carried over from FL-02 proof statement.</strong> Every section below must earn its place against these three, or it gets cut:
+                <div class="anchor-triple">
+                    <div class="anchor-chip" contenteditable="true"><b>The one claim</b>I design and ship production business systems that replace paper processes</div>
+                    <div class="anchor-chip" contenteditable="true"><b>The one person</b>An operations manager at an industrial SME</div>
+                    <div class="anchor-chip" contenteditable="true"><b>The one action</b>Email me a scoped project inquiry</div>
+                </div>
+            </div>
+
+            <p style="font-size:0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                Single-page scroll site — the sections <em>are</em> the sitemap, ordered as the reader's journey. Nodes marked
+                <span style="color: var(--accent); font-weight:700;">REVISED</span> changed after the Claude pressure-test (§4.3).
+            </p>
+
+            <div class="sitemap-flow">
+                <div class="flow-node">
+                    <span class="stage-tag">Landing</span>
+                    <h3><span class="node-num">1</span>Hero</h3>
+                    <p contenteditable="true">States the claim plainly — "in production, not demos" — availability badge, single CTA jumping to Contact.</p>
+                    <div class="earns" contenteditable="true"><strong>Earns its place:</strong> the ops manager knows in 5 seconds whether I solve their problem.</div>
+                </div>
+                <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                <div class="flow-node">
+                    <span class="stage-tag">Believing</span>
+                    <h3><span class="node-num">2</span>Proof — Flagship Case Study</h3>
+                    <p contenteditable="true">DG Cement payroll &amp; attendance system, full story: paper problem → offline-first PWA → 50+ workers daily, 70%+ less payroll time. Real client quote, honestly labeled ("Site Manager, DG Cement project — name withheld on request") + "still actively supporting it today."</p>
+                    <div class="earns" contenteditable="true"><strong>Earns its place:</strong> the one thing a CV cannot show — the system is LIVE. Believing happens here.</div>
+                </div>
+                <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                <div class="flow-node revised">
+                    <span class="stage-tag">Believing</span>
+                    <h3><span class="node-num">3</span>Work — Supporting Depth</h3>
+                    <p contenteditable="true">Ops-weighted six: Inventory Management System, Customer Trends ETL, Mobile Expense Tracker, Global Sales Dashboard + 2 strongest AI/data builds. Compiler projects moved behind "view all."</p>
+                    <div class="earns" contenteditable="true"><strong>Earns its place:</strong> every featured card reinforces "she ships production systems for operations problems" — depth, not a skills buffet.</div>
+                </div>
+                <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                <div class="flow-node revised">
+                    <span class="stage-tag">Trust</span>
+                    <h3><span class="node-num">4</span>How I Work</h3>
+                    <p contenteditable="true">Availability status &bull; post-launch support — true and current: I still actively support the DG Cement system today &bull; how scope changes are handled. Replaced the original About section.</p>
+                    <div class="earns" contenteditable="true"><strong>Earns its place:</strong> answers the ops manager's real question right before the ask — "will she disappear after delivery?" — not a recruiter's question about grades.</div>
+                </div>
+                <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                <div class="flow-node">
+                    <span class="stage-tag">Acting</span>
+                    <h3><span class="node-num">5</span>Scope Builder</h3>
+                    <p contenteditable="true">Interactive "what process do you want to replace?" — assembles a scoped inquiry from the visitor's selections.</p>
+                    <div class="earns" contenteditable="true"><strong>Earns its place:</strong> converts "I'm interested" into a <em>scoped</em> inquiry — quality of the action, not just quantity.</div>
+                </div>
+                <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                <div class="flow-node" style="border-left-color: #10b981;">
+                    <span class="stage-tag">The One Action</span>
+                    <h3><span class="node-num">6</span>Contact</h3>
+                    <p contenteditable="true">Form pre-filled by the Scope Builder → email lands in my inbox. Direct email fallback + response-time note. Credentials (2nd in CS dept, ICSC top 2%, 22+ certs) compressed to one line here — off the conversion path.</p>
+                    <div class="earns" contenteditable="true"><strong>Earns its place:</strong> it IS the action — email me a scoped project inquiry.</div>
+                </div>
+            </div>
+
+            <div class="cut-list">
+                <h3><i class="fa-solid fa-scissors" style="color:#ef4444; margin-right:0.4rem;"></i>What was cut — resisting pages "just because"</h3>
+                <div class="cut-item"><i class="fa-solid fa-scissors"></i><div contenteditable="true"><strong>Services grid (4 role labels)</strong> <span>— "AI &amp; ML Engineer / Data Systems Architect / Full-Stack / BI Analyst" is four claims hiding behind "and"; the ops manager needs ONE.</span></div></div>
+                <div class="cut-item"><i class="fa-solid fa-scissors"></i><div contenteditable="true"><strong>Certificates section (14 cards)</strong> <span>— the ops manager doesn't care about Coursera; collapsed to one line near Contact.</span></div></div>
+                <div class="cut-item"><i class="fa-solid fa-scissors"></i><div contenteditable="true"><strong>Skills / tech-stack chip wall</strong> <span>— they care that it works offline in the field, not about tech stacks; tags on project cards cover it.</span></div></div>
+                <div class="cut-item"><i class="fa-solid fa-scissors"></i><div contenteditable="true"><strong>Separate experience timeline</strong> <span>— the experience that matters IS the case study in section 2.</span></div></div>
+                <div class="cut-item"><i class="fa-solid fa-scissors"></i><div contenteditable="true"><strong>About section</strong> <span>(cut after pressure-test) — academic rank answers a recruiter's question, not the ops manager's; replaced by "How I Work," compressed to one line in Contact.</span></div></div>
+                <div class="cut-item"><i class="fa-solid fa-scissors"></i><div contenteditable="true"><strong>Compiler projects from featured Work</strong> <span>(cut after pressure-test) — UrduPy / SQL2Pandas / LALR moved behind "view all"; impressive to engineers, focus-pulling for an ops manager.</span></div></div>
+            </div>
+
+            <div class="revision-note">
+                <i class="fa-solid fa-rotate"></i>
+                <div contenteditable="true"><strong>v1 → v2:</strong> the original map had <em>About (academic credentials)</em> in slot 4 — directly before the Scope Builder ask. The pressure-test (§4.3) identified this as a funnel wobble and it was replaced by <em>How I Work</em>. Full change record in §4.4.</div>
+            </div>
+        </section>
+
+        <!-- ═══════ Section 2: Toolkit ═══════ -->
+        <section id="toolkit-section">
+            <h2>2 &nbsp;Free Toolkit Setup</h2>
+            <ul class="checklist">
+                <li class="checklist-item">
+                    <input type="checkbox" id="chk-claude" checked>
+                    <label class="checklist-label" for="chk-claude">Claude (Anthropic) account active</label>
+                    <span class="checklist-desc">claude.ai — free tier</span>
+                </li>
+                <li class="checklist-item">
+                    <input type="checkbox" id="chk-chatgpt" checked>
+                    <label class="checklist-label" for="chk-chatgpt">ChatGPT (OpenAI) account active</label>
+                    <span class="checklist-desc">chatgpt.com — free tier</span>
+                </li>
+                <li class="checklist-item">
+                    <input type="checkbox" id="chk-gemini" checked>
+                    <label class="checklist-label" for="chk-gemini">Gemini (Google) account active</label>
+                    <span class="checklist-desc">gemini.google.com — free tier</span>
+                </li>
+                <li class="checklist-item">
+                    <input type="checkbox" id="chk-perplexity" checked>
+                    <label class="checklist-label" for="chk-perplexity">Perplexity account active</label>
+                    <span class="checklist-desc">perplexity.ai — free tier</span>
+                </li>
+                <li class="checklist-item">
+                    <input type="checkbox" id="chk-project" checked>
+                    <label class="checklist-label" for="chk-project">Claude Project created: <strong>&nbsp;"Portfolio Build — Sara Arif (AI Fluency, 8 weeks)"</strong></label>
+                    <span class="checklist-desc">Proof statement as custom instructions + tutor role — follows all 8 weeks</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- ═══════ Section 3: Claude Project Instructions ═══════ -->
+        <section id="claude-section">
+            <h2>3 &nbsp;Claude Project — Custom Instructions</h2>
+            <div class="claude-box">
+                <div class="code-header">
+                    <span class="code-title">Project: Portfolio Build — Sara Arif (AI Fluency, 8 weeks)</span>
+                    <button class="btn btn-secondary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;" id="copy-btn">
+                        <i class="fa-regular fa-copy"></i> Copy Instructions
+                    </button>
+                </div>
+                <pre id="custom-instructions-text">
+You are my tutor and thinking partner for an 8-week portfolio build (FlyRank
+General AI Fluency track). I am Sara Arif, a CS undergraduate and freelance
+software architect.
+
+[MY PROOF STATEMENT — the anchor for everything]
+My portfolio proves one thing: I design and ship production business systems
+that replace paper processes — real software running in the field, not demos.
+The proof is the DG Cement payroll & attendance system I architected solo: an
+offline-first PWA used daily by 50+ construction workers across remote sites,
+28 API endpoints, zero data loss during outages, and 70%+ less weekly payroll
+processing time. It's built for one reader: an operations manager at an
+industrial SME who is drowning in paper registers and spreadsheets. The one
+action I want from them: email me a scoped project inquiry.
+
+[HOW TO WORK WITH ME]
+1. Act as a tutor, not an author — interview me with sharp questions; make me decide.
+2. Pressure-test everything against the proof statement: does it move the ops
+   manager toward emailing a scoped inquiry? If not, tell me to cut it.
+3. Guard the one claim — AI/ML is supporting depth, not the headline.
+4. Be honest over kind — flag vague claims and portfolio clichés.
+5. Keep me shipping — end each session asking what I'll ship before the next.
+                </pre>
+            </div>
+        </section>
+
+        <!-- ═══════ Section 4: Evidence ═══════ -->
+        <section id="evidence-section">
+            <h2>4 &nbsp;Evidence</h2>
+
+            <div class="evidence-grid-2">
+                <!-- 4.1 Sitemap sketch -->
+                <div>
+                    <div class="evidence-label"><span class="req">4.1 required</span> Sitemap sketch</div>
+                    <div class="browser-frame">
+                        <div class="browser-bar">
+                            <div class="browser-dots">
+                                <span class="browser-dot red"></span>
+                                <span class="browser-dot yellow"></span>
+                                <span class="browser-dot green"></span>
+                            </div>
+                            <div class="browser-address">sitemap-sketch (hand-drawn)</div>
+                        </div>
+                        <div class="screenshot-area" id="drop-zone-1">
+                            <div class="screenshot-placeholder" id="placeholder-content-1" style="display: none;">
+                                <i class="fa-solid fa-pen-ruler" style="color: var(--primary-light);"></i>
+                                <p>Sitemap Sketch Photo</p>
+                                <span>Drag photo here or click to browse</span>
+                            </div>
+                            <img id="screenshot-preview-1" class="preview-img" alt="Hand-drawn sitemap sketch" src="sitemap-sketch.png" style="display: block;">
+                            <input type="file" id="file-input-1" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4.2 Claude Project screenshot -->
+                <div>
+                    <div class="evidence-label"><span class="req">4.2 required</span> Configured Claude Project</div>
+                    <div class="browser-frame">
+                        <div class="browser-bar">
+                            <div class="browser-dots">
+                                <span class="browser-dot red"></span>
+                                <span class="browser-dot yellow"></span>
+                                <span class="browser-dot green"></span>
+                            </div>
+                            <div class="browser-address">claude.ai/project/portfolio-build</div>
+                        </div>
+                        <div class="screenshot-area" id="drop-zone-2">
+                            <div class="screenshot-placeholder" id="placeholder-content-2">
+                                <i class="fa-solid fa-gears" style="color: var(--accent);"></i>
+                                <p>Claude Project — name + custom instructions visible</p>
+                                <span>Drag screenshot here or click to browse</span>
+                            </div>
+                            <img id="screenshot-preview-2" class="preview-img" alt="Claude Project configuration screenshot">
+                            <input type="file" id="file-input-2" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4.3 Pressure test — MULTI-upload gallery -->
+            <div class="evidence-label"><span class="req">4.3 required</span> Pressure-test — prompt &amp; Claude's full response</div>
+            <div class="gallery-controls">
+                <div class="gallery-hint"><i class="fa-solid fa-circle-info"></i> Add as many screenshots as needed to show the complete thread, in reading order — they print stacked and numbered.</div>
+                <button class="btn btn-secondary" id="add-shots-btn" style="padding: 0.4rem 0.9rem; font-size: 0.82rem;">
+                    <i class="fa-solid fa-plus"></i> Add Screenshots
+                </button>
+            </div>
+            <div class="multi-drop" id="multi-drop-zone">
+                <i class="fa-solid fa-images"></i>
+                <p>Drop multiple screenshots here (or click)</p>
+                <span>Prompt first, then Claude's response in order &bull; PNG/JPG &bull; select several files at once</span>
+            </div>
+            <input type="file" id="multi-file-input" accept="image/*" multiple style="display:none;">
+            <div class="gallery" id="pressure-gallery"></div>
+
+            <!-- 4.4 Change record -->
+            <div class="change-box" id="change-note">
+                <h4><i class="fa-solid fa-arrows-rotate"></i> 4.4 &nbsp;Changes made from the pressure-test (pass/revise: "at least one thing you'll change")</h4>
+                <p contenteditable="true"><strong>1 — About → "How I Work" (highest-impact change).</strong> Claude walked the map as the ops manager and caught About sitting directly before the Scope Builder — answering a recruiter's question ("is she smart?") instead of the ops manager's real fear ("will she disappear after she cashes my deposit?"). I replaced it with a "How I Work" block — availability, post-launch support (true: I still actively support the DG Cement system today), and how scope changes are handled — and compressed academic credentials to one line in Contact. &nbsp;<strong>2 — Testimonial honesty.</strong> Claude challenged attribution; the quote is real but the client can't be publicly named, so it is now labeled "Site Manager, DG Cement project — name withheld on request." &nbsp;<strong>3 — Work re-weighted.</strong> Claude predicted at least two featured projects were pulling focus; the compiler projects (UrduPy, SQL2Pandas, LALR) moved behind "view all" because they impress engineers, not ops managers.</p>
+            </div>
+        </section>
+
+        <!-- ═══════ Section 5: Self-check ═══════ -->
+        <section id="check-section">
+            <h2>5 &nbsp;Pass / Revise Self-Check</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 55%;">Criterion</th>
+                            <th style="width: 45%;">Verification</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td contenteditable="true">The sitemap is small and every page earns its place against the claim and the one action</td>
+                            <td contenteditable="true">6 sections, each with an explicit "earns its place" line mapped to claim/person/action (§1); 6 cut items listed with reasons</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">Claude Project configured with genuine custom instructions (proof statement pasted in), not defaults</td>
+                            <td contenteditable="true">Full FL-02 proof statement + 5 tutor behavior rules (§3); configuration screenshot embedded (§4.2)</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">The first prompt pressure-tested the map, and at least one thing to change was noted</td>
+                            <td contenteditable="true">Complete prompt + response thread embedded (§4.3); three concrete changes recorded (§4.4) and applied to the map — revised nodes marked in §1</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>FL-03 Draw the Path: Portfolio Sitemap + Toolkit &bull; Generated for FlyRank Track Evaluation</p>
+        </footer>
+
+        <!-- Print Footer (only visible on printed PDF) -->
+        <div class="print-footer">
+            <span>Prepared for FlyRank Evaluation Track</span>
+            <span id="print-date"></span>
+        </div>
+    </div>
+
+    <!-- Scripting -->
+    <script>
+        const themeBtn = document.getElementById('theme-btn');
+        const printBtn = document.getElementById('print-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const customInstructionsText = document.getElementById('custom-instructions-text');
+
+        // Theme toggle
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            themeBtn.innerHTML = isLight
+                ? '<i class="fa-solid fa-moon"></i> Toggle Dark Theme'
+                : '<i class="fa-solid fa-sun"></i> Toggle Light Theme (for Print)';
+        });
+
+        // Print
+        printBtn.addEventListener('click', () => {
+            const wasLight = document.body.classList.contains('light-theme');
+            if (!wasLight) document.body.classList.add('light-theme');
+            window.print();
+            if (!wasLight) document.body.classList.remove('light-theme');
+        });
+
+        // Copy instructions
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(customInstructionsText.textContent.trim()).then(() => {
+                const originalHtml = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                copyBtn.style.background = 'rgba(16, 185, 129, 0.2)';
+                copyBtn.style.color = '#10b981';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHtml;
+                    copyBtn.style.background = '';
+                    copyBtn.style.color = '';
+                }, 2000);
+            });
+        });
+
+        // ---- Single drop zones (4.1, 4.2) ----
+        for (let i = 1; i <= 2; i++) {
+            setupSingleUpload(
+                document.getElementById('drop-zone-' + i),
+                document.getElementById('file-input-' + i),
+                document.getElementById('screenshot-preview-' + i),
+                document.getElementById('placeholder-content-' + i)
+            );
+        }
+
+        function setupSingleUpload(dropZone, fileInput, previewImg, placeholder) {
+            dropZone.addEventListener('click', () => fileInput.click());
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--primary-light)'; });
+            dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = 'var(--border-color)'; });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--border-color)';
+                if (e.dataTransfer.files.length > 0) handleSingle(e.dataTransfer.files[0], previewImg, placeholder, dropZone);
+            });
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) handleSingle(e.target.files[0], previewImg, placeholder, dropZone);
+            });
+        }
+
+        function handleSingle(file, previewImg, placeholder, dropZone) {
+            if (!file.type.startsWith('image/')) { alert('Please upload an image file (PNG, JPG, etc.).'); return; }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+                previewImg.style.display = 'block';
+                placeholder.style.display = 'none';
+                dropZone.style.padding = '0.5rem';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ---- Multi-upload gallery (4.3 pressure test) ----
+        const multiDrop = document.getElementById('multi-drop-zone');
+        const multiInput = document.getElementById('multi-file-input');
+        const gallery = document.getElementById('pressure-gallery');
+        const addShotsBtn = document.getElementById('add-shots-btn');
+
+        addShotsBtn.addEventListener('click', () => multiInput.click());
+        multiDrop.addEventListener('click', () => multiInput.click());
+        multiDrop.addEventListener('dragover', (e) => { e.preventDefault(); multiDrop.style.borderColor = 'var(--accent)'; });
+        multiDrop.addEventListener('dragleave', () => { multiDrop.style.borderColor = 'var(--border-color)'; });
+        multiDrop.addEventListener('drop', (e) => {
+            e.preventDefault();
+            multiDrop.style.borderColor = 'var(--border-color)';
+            addFiles(e.dataTransfer.files);
+        });
+        multiInput.addEventListener('change', (e) => { addFiles(e.target.files); multiInput.value = ''; });
+
+        function addFiles(fileList) {
+            const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+            if (files.length === 0) { alert('Please upload image files (PNG, JPG, etc.).'); return; }
+            // Sort by filename so numbered screenshots (01, 02, ...) keep reading order
+            files.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => appendGalleryItem(e.target.result, file.name);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function appendGalleryItem(src, name) {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.innerHTML =
+                '<div class="g-bar">' +
+                    '<span class="g-label"></span>' +
+                    '<span style="display:flex;align-items:center;gap:0.6rem;">' +
+                        '<span style="font-size:0.7rem;opacity:0.7;">' + escapeHtml(name) + '</span>' +
+                        '<button class="g-remove" title="Remove"><i class="fa-solid fa-trash"></i></button>' +
+                    '</span>' +
+                '</div>';
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = 'Pressure-test evidence';
+            item.appendChild(img);
+            item.querySelector('.g-remove').addEventListener('click', (e) => {
+                e.stopPropagation();
+                item.remove();
+                renumberGallery();
+            });
+            gallery.appendChild(item);
+            renumberGallery();
+        }
+
+        function renumberGallery() {
+            const items = gallery.querySelectorAll('.gallery-item');
+            items.forEach((item, idx) => {
+                item.querySelector('.g-label').textContent =
+                    'Pressure-Test Evidence ' + (idx + 1) + ' of ' + items.length;
+            });
+        }
+
+        function escapeHtml(s) {
+            return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        }
+
+        document.getElementById('print-date').textContent = "Generated on " + new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+    </script>
+</body>
+</html>

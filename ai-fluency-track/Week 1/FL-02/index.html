@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FL-02 — What Are You Proving? | Sara Arif</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ============ FL-02 screen additions ============ */
+
+        /* Evaluator summary */
+        .eval-banner {
+            background: linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(217,119,6,0.08) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow);
+        }
+        .eval-banner h2 { border: none; padding-left: 0; margin-bottom: 1rem; font-size: 1.3rem; }
+        .eval-banner h2 i { color: var(--accent); margin-right: 0.5rem; }
+        .deliverable-map { width: 100%; border-collapse: collapse; }
+        .deliverable-map th, .deliverable-map td { padding: 0.6rem 0.8rem; font-size: 0.88rem; border-bottom: 1px solid var(--border-color); text-align: left; }
+        .deliverable-map th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+        .deliverable-map a { color: var(--primary-light); text-decoration: none; font-weight: 600; }
+        .deliverable-map a:hover { text-decoration: underline; }
+        .status-pill {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.2rem 0.65rem; border-radius: 20px;
+            font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        .status-done { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.35); }
+        .status-embed { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.35); }
+
+        /* Claim / person / action cards */
+        .triple-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; margin-bottom: 1.75rem; }
+        @media (max-width: 820px) { .triple-grid { grid-template-columns: 1fr; } }
+        .triple-card {
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 1.2rem 1.4rem;
+            background: rgba(255,255,255,0.03);
+        }
+        .triple-card .t-label {
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--accent); margin-bottom: 0.45rem; display: flex; align-items: center; gap: 0.4rem;
+        }
+        .triple-card p { font-size: 0.95rem; font-weight: 600; line-height: 1.5; }
+        .triple-card .t-note { font-size: 0.78rem; color: var(--text-muted); font-weight: 400; margin-top: 0.5rem; }
+
+        /* The statement block */
+        .statement-block {
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--accent);
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.03);
+            padding: 1.6rem 2rem;
+            font-family: var(--font-heading);
+            font-size: 1.05rem;
+            line-height: 1.85;
+        }
+        .statement-block mark {
+            background: rgba(217,119,6,0.18);
+            color: inherit;
+            padding: 0.05em 0.25em;
+            border-radius: 3px;
+            font-weight: 700;
+        }
+        body.light-theme .statement-block mark { background: #fde9cf; }
+        .why-block {
+            margin-top: 1.5rem;
+            border: 1px dashed var(--accent);
+            border-radius: var(--radius);
+            background: rgba(217,119,6,0.05);
+            padding: 1.1rem 1.5rem;
+        }
+        .why-block h4 { color: var(--accent); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+        .why-block p { font-size: 0.95rem; font-style: italic; line-height: 1.7; }
+
+        /* Interview log */
+        .qa-item {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.02);
+            padding: 1.1rem 1.4rem;
+            margin-bottom: 1rem;
+        }
+        .qa-item .q { display: flex; gap: 0.7rem; align-items: baseline; margin-bottom: 0.5rem; }
+        .qa-item .q i { color: var(--primary-light); }
+        .qa-item .q p { font-weight: 600; font-size: 0.93rem; }
+        .qa-item .a { display: flex; gap: 0.7rem; align-items: baseline; }
+        .qa-item .a i { color: #10b981; }
+        .qa-item .a p { font-size: 0.9rem; color: var(--text-muted); }
+        .qa-item .a p strong { color: var(--text-main); }
+        .pushback {
+            border: 1px solid rgba(239,68,68,0.4);
+            border-left: 4px solid #ef4444;
+            border-radius: var(--radius);
+            background: rgba(239,68,68,0.05);
+            padding: 1.1rem 1.4rem;
+            margin: 1.25rem 0;
+        }
+        .pushback h4 { color: #ef4444; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+        .pushback h4 i { margin-right: 0.4rem; }
+        .pushback p { font-size: 0.9rem; }
+        .pushback p + p { margin-top: 0.5rem; }
+
+        /* Cut list */
+        .cut-list { margin-top: 1.5rem; }
+        .cut-list h3 { font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 0.6rem; }
+        .cut-item {
+            display: flex; gap: 0.8rem; align-items: baseline;
+            padding: 0.55rem 0; border-bottom: 1px dashed var(--border-color);
+            font-size: 0.9rem;
+        }
+        .cut-item:last-child { border-bottom: none; }
+        .cut-item .fa-scissors { color: #ef4444; flex-shrink: 0; }
+        .cut-item span { color: var(--text-muted); }
+
+        /* Evidence multi-gallery (optional) */
+        .evidence-label {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+            color: var(--text-muted); margin: 0 0 0.6rem 0;
+        }
+        .evidence-label .req { color: var(--accent); font-size: 0.68rem; border: 1px solid var(--accent); padding: 0.1rem 0.45rem; border-radius: 4px; }
+        .gallery-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.6rem; }
+        .gallery-hint { font-size: 0.82rem; color: var(--text-muted); }
+        .multi-drop {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.6rem; text-align: center; cursor: pointer;
+            transition: border-color 0.2s ease, background 0.2s ease;
+            background: rgba(255,255,255,0.01);
+        }
+        .multi-drop:hover { border-color: var(--accent); background: rgba(217,119,6,0.03); }
+        .multi-drop i { font-size: 2rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; }
+        .multi-drop p { font-weight: 500; font-size: 0.92rem; }
+        .multi-drop span { font-size: 0.78rem; color: var(--text-muted); }
+        .gallery { display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin-top: 1.25rem; }
+        .gallery-item { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; background: var(--bg-card); position: relative; }
+        .gallery-item .g-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.45rem 0.9rem;
+            background: rgba(0,0,0,0.18); border-bottom: 1px solid var(--border-color);
+            font-size: 0.75rem; color: var(--text-muted);
+        }
+        body.light-theme .gallery-item .g-bar { background: #f1f5f9; }
+        .gallery-item .g-bar .g-label { font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+        .gallery-item .g-remove { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 0.8rem; padding: 0.15rem 0.4rem; }
+        .gallery-item img { width: 100%; display: block; }
+
+        /* ═══════════════════════════════════════════════════════════
+           PRINT — professional paginated report (same architecture
+           as FL-03: overrides the FL-01 base stylesheet)
+           Page 1  cover: title + evaluator summary
+           Page 2  proof statement + one-line why
+           Page 3  interview log (AI as thinking partner)
+           Page 4  evidence (if any) + self-check
+           ═══════════════════════════════════════════════════════════ */
+        @media print {
+            @page { size: A4; margin: 1.5cm 1.4cm 1.7cm 1.4cm; }
+
+            html, body {
+                background: #ffffff !important;
+                color: #1e293b !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                font-size: 9.5pt !important;
+                line-height: 1.5 !important;
+            }
+
+            .bg-glow, .bg-glow-2, .controls-bar, footer,
+            .multi-drop, .gallery-controls, .g-remove { display: none !important; }
+
+            .container { max-width: 100% !important; margin: 0 !important; }
+
+            section {
+                background: none !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 0 1.4rem 0 !important;
+                page-break-inside: auto !important;
+                break-inside: auto !important;
+                backdrop-filter: none !important;
+            }
+            table { table-layout: auto !important; }
+            th:nth-child(1), td:nth-child(1),
+            th:nth-child(2), td:nth-child(2),
+            th:nth-child(3), td:nth-child(3),
+            th:nth-child(4), td:nth-child(4) { width: auto !important; }
+
+            .print-header {
+                display: flex !important;
+                justify-content: space-between;
+                border-bottom: 2px solid #1e3a8a;
+                padding-bottom: 5pt;
+                margin-bottom: 14pt;
+                font-size: 7.5pt;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                color: #475569;
+            }
+            .print-footer {
+                display: flex !important;
+                justify-content: space-between;
+                border-top: 1px solid #cbd5e1;
+                padding-top: 5pt;
+                margin-top: 18pt;
+                font-size: 7.5pt;
+                color: #64748b;
+            }
+
+            header { margin-bottom: 12pt !important; padding-bottom: 10pt !important; border-bottom: 1px solid #e2e8f0 !important; text-align: left !important; }
+            h1 {
+                font-size: 20pt !important;
+                background: none !important;
+                -webkit-text-fill-color: initial !important;
+                color: #0f172a !important;
+                margin-bottom: 2pt !important;
+                letter-spacing: -0.02em !important;
+            }
+            .subtitle { color: #b45309 !important; font-size: 9pt !important; letter-spacing: 0.18em !important; }
+            .meta-info { justify-content: flex-start !important; gap: 14pt !important; margin-top: 4pt !important; font-size: 8.5pt !important; color: #475569 !important; }
+            .meta-info strong { color: #0f172a !important; }
+            .profile-avatar { border-color: #b45309 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+            h2 {
+                font-size: 12.5pt !important;
+                color: #0f172a !important;
+                border-left: none !important;
+                border-bottom: 1.5px solid #1e3a8a !important;
+                padding: 0 0 4pt 0 !important;
+                margin-bottom: 10pt !important;
+                page-break-after: avoid !important;
+            }
+
+            /* page plan */
+            #statement-section { page-break-before: always !important; break-before: page !important; }
+            #interview-section { page-break-before: always !important; break-before: page !important; }
+            #evidence-section  { page-break-before: always !important; break-before: page !important; }
+            #check-section     { page-break-before: avoid !important; margin-top: 14pt !important; }
+            /* base css forces a break on #claude-section — no such id here, safe */
+
+            /* evaluator summary */
+            .eval-banner {
+                background: #ffffff !important;
+                border: 1.5px solid #1e3a8a !important;
+                border-radius: 6px !important;
+                padding: 12pt 14pt !important;
+                margin-bottom: 0 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid !important;
+            }
+            .eval-banner h2 { border-bottom: 1px solid #e2e8f0 !important; font-size: 11.5pt !important; }
+            .deliverable-map th, .deliverable-map td {
+                font-size: 8pt !important;
+                padding: 5pt 6pt !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+                vertical-align: top !important;
+            }
+            .deliverable-map th { color: #1e3a8a !important; font-size: 7pt !important; }
+            .deliverable-map th:nth-child(1), .deliverable-map td:nth-child(1) { width: 44% !important; }
+            .deliverable-map th:nth-child(2), .deliverable-map td:nth-child(2) { width: 33% !important; }
+            .deliverable-map th:nth-child(3), .deliverable-map td:nth-child(3) { width: 23% !important; }
+            .deliverable-map a { color: #1e3a8a !important; text-decoration: none !important; }
+            .status-pill {
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+                font-size: 6.5pt !important; padding: 1.5pt 5pt !important;
+            }
+            .status-done  { background: #ecfdf5 !important; color: #047857 !important; border: 0.75pt solid #047857 !important; }
+            .status-embed { background: #eff6ff !important; color: #1d4ed8 !important; border: 0.75pt solid #1d4ed8 !important; }
+
+            /* triple cards */
+            .triple-grid { display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 8pt !important; margin-bottom: 12pt !important; }
+            .triple-card {
+                background: #ffffff !important;
+                border: 1pt solid #94a3b8 !important;
+                border-top: 3pt solid #b45309 !important;
+                padding: 8pt 10pt !important;
+                page-break-inside: avoid !important;
+            }
+            .triple-card .t-label { color: #b45309 !important; font-size: 6.5pt !important; }
+            .triple-card p { font-size: 8.5pt !important; color: #0f172a !important; }
+            .triple-card .t-note { font-size: 7pt !important; color: #64748b !important; }
+
+            /* statement */
+            .statement-block {
+                background: #ffffff !important;
+                border: 1pt solid #94a3b8 !important;
+                border-left: 4pt solid #b45309 !important;
+                padding: 12pt 14pt !important;
+                font-size: 10.5pt !important;
+                line-height: 1.8 !important;
+                color: #1e293b !important;
+                page-break-inside: avoid !important;
+            }
+            .statement-block mark {
+                background: #fde9cf !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .why-block {
+                background: #fffbf5 !important;
+                border: 1pt dashed #b45309 !important;
+                padding: 9pt 12pt !important;
+                margin-top: 10pt !important;
+                page-break-inside: avoid !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .why-block h4 { color: #b45309 !important; font-size: 8pt !important; }
+            .why-block p { font-size: 9.5pt !important; color: #1e293b !important; }
+
+            /* interview log */
+            .qa-item {
+                background: #ffffff !important;
+                border: 1pt solid #cbd5e1 !important;
+                padding: 7pt 10pt !important;
+                margin-bottom: 6pt !important;
+                page-break-inside: avoid !important;
+            }
+            .qa-item .q p { font-size: 8.5pt !important; color: #0f172a !important; }
+            .qa-item .q i { color: #1e3a8a !important; }
+            .qa-item .a p { font-size: 8pt !important; color: #475569 !important; }
+            .qa-item .a p strong { color: #0f172a !important; }
+            .qa-item .a i { color: #047857 !important; }
+            .pushback {
+                background: #fef2f2 !important;
+                border: 1pt solid #fca5a5 !important;
+                border-left: 3pt solid #dc2626 !important;
+                padding: 8pt 11pt !important;
+                margin: 8pt 0 !important;
+                page-break-inside: avoid !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .pushback h4 { color: #dc2626 !important; font-size: 7.5pt !important; }
+            .pushback p { font-size: 8.5pt !important; color: #1e293b !important; }
+
+            .cut-list { margin-top: 10pt !important; page-break-inside: avoid !important; }
+            .cut-list h3 { font-size: 10pt !important; }
+            .cut-item { font-size: 8pt !important; padding: 3pt 0 !important; border-bottom: 0.75pt dashed #cbd5e1 !important; }
+            .cut-item span { color: #475569 !important; }
+
+            /* evidence gallery */
+            .evidence-label { font-size: 8.5pt !important; color: #1e293b !important; margin: 0 0 4pt 0 !important; page-break-after: avoid !important; }
+            .evidence-label .req { color: #b45309 !important; border-color: #b45309 !important; font-size: 6pt !important; }
+            .gallery { gap: 8pt !important; margin-top: 4pt !important; }
+            .gallery-item {
+                border: 1pt solid #94a3b8 !important;
+                border-radius: 4px !important;
+                background: #ffffff !important;
+                page-break-inside: avoid !important;
+            }
+            .gallery-item .g-bar {
+                background: #f1f5f9 !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+                color: #1e3a8a !important;
+                font-size: 6.5pt !important;
+                padding: 3pt 8pt !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .gallery-item img { max-height: 470pt !important; width: auto !important; max-width: 100% !important; margin: 0 auto !important; object-fit: contain !important; }
+            /* if no screenshots were added, hide the whole evidence section in print */
+            #evidence-section:has(.gallery:empty) { display: none !important; }
+
+            /* self-check table */
+            #check-section table { width: 100% !important; }
+            #check-section th, #check-section td {
+                font-size: 8.5pt !important;
+                padding: 6pt 8pt !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+                vertical-align: top !important;
+            }
+            #check-section th { color: #1e3a8a !important; }
+            #check-section th:nth-child(1), #check-section td:nth-child(1) { width: 50% !important; }
+            #check-section th:nth-child(2), #check-section td:nth-child(2) { width: 50% !important; }
+            #check-section tbody tr td:first-child { font-weight: 600 !important; color: #0f172a !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="container">
+        <!-- Print Header (only visible on printed PDF) -->
+        <div class="print-header">
+            <span>Sara Arif &bull; Portfolio Proof Statement</span>
+            <span>Document Code: FL-02 &bull; Week 1 &bull; Phase: Setup</span>
+        </div>
+
+        <!-- Header -->
+        <header>
+            <span class="subtitle">Assignment FL-02</span>
+            <h1 contenteditable="true" spellcheck="false">What Are You Proving?</h1>
+            <div class="meta-info">
+                <div class="meta-item">Track: <strong>General AI Fluency</strong></div>
+                <div class="meta-item">Week: <strong>1</strong> &bull; Phase: <strong>Setup</strong></div>
+                <div class="meta-item student-profile">
+                    <img src="sara arif.png" alt="Sara Arif" class="profile-avatar">
+                    <span>Student: <strong contenteditable="true" id="student-name">Sara Arif</strong></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Interactive Controls -->
+        <div class="controls-bar">
+            <div class="control-label">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Double-click text to edit &bull; optional: add interview screenshots in §3 &bull; then Print / Save as PDF.</span>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="theme-btn">
+                    <i class="fa-solid fa-sun"></i> Toggle Light Theme (for Print)
+                </button>
+                <button class="btn btn-primary" id="print-btn">
+                    <i class="fa-solid fa-print"></i> Print / Save as PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- ═══════ EVALUATOR SUMMARY ═══════ -->
+        <div class="eval-banner" id="evaluator-summary">
+            <h2><i class="fa-solid fa-clipboard-check"></i>Evaluator Summary — Deliverables &amp; Where to Find Them</h2>
+            <table class="deliverable-map">
+                <thead>
+                    <tr>
+                        <th style="width:42%;">Required deliverable (per brief)</th>
+                        <th style="width:34%;">Location in this document</th>
+                        <th style="width:24%;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>One-paragraph proof statement: one claim + one person + one action</td>
+                        <td><a href="#statement-section">§1 Proof Statement</a> (elements highlighted inline)</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> Complete</span></td>
+                    </tr>
+                    <tr>
+                        <td>One honest line on why this needs to exist (what a CV/LinkedIn can't prove)</td>
+                        <td><a href="#statement-section">§1 — "The One-Line Why"</a></td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> Complete</span></td>
+                    </tr>
+                    <tr>
+                        <td>AI used as thinking partner, not author — interviewed with sharp questions; pushed back until the claim is narrow and true</td>
+                        <td><a href="#interview-section">§2 Interview Log</a> — 2 rounds, 1 pushback, 3 cuts</td>
+                        <td><span class="status-pill status-embed"><i class="fa-solid fa-comments"></i> Documented</span></td>
+                    </tr>
+                    <tr>
+                        <td>Posted to track thread</td>
+                        <td>Thread post text = §1 verbatim (see <code>thread_post.md</code>)</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> Ready</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ═══════ Section 1: Proof Statement ═══════ -->
+        <section id="statement-section">
+            <h2>1 &nbsp;The Proof Statement — One Claim, One Person, One Action</h2>
+
+            <div class="triple-grid">
+                <div class="triple-card">
+                    <div class="t-label"><i class="fa-solid fa-bullseye"></i> The One Claim</div>
+                    <p contenteditable="true">I design and ship production business systems that replace paper processes.</p>
+                    <div class="t-note" contenteditable="true">One named skill — not four roles hiding behind "and". AI/ML demoted to supporting depth.</div>
+                </div>
+                <div class="triple-card">
+                    <div class="t-label"><i class="fa-solid fa-user"></i> The One Person</div>
+                    <p contenteditable="true">An operations manager at an industrial SME.</p>
+                    <div class="t-note" contenteditable="true">Modeled on the real DG Cement site manager who already paid for exactly this work.</div>
+                </div>
+                <div class="triple-card">
+                    <div class="t-label"><i class="fa-solid fa-envelope"></i> The One Action</div>
+                    <p contenteditable="true">Email me a scoped project inquiry.</p>
+                    <div class="t-note" contenteditable="true">One action — not "hire / call / download CV / follow". The portfolio's Scope Builder exists to produce it.</div>
+                </div>
+            </div>
+
+            <div class="statement-block" contenteditable="true">
+                My portfolio proves one thing: <mark>I design and ship production business systems that replace paper processes</mark> — real software running in the field, not demos. The proof is the DG Cement payroll &amp; attendance system I architected solo: an offline-first PWA used daily by 50+ construction workers across remote sites, 28 API endpoints, zero data loss during outages, and 70%+ less weekly payroll processing time. It's built for one reader: <mark>an operations manager at an industrial SME</mark> who is drowning in paper registers and spreadsheets and needs someone who has already solved exactly this. The one action I want from them: <mark>email me a scoped project inquiry</mark> describing the process they want to replace. (My AI/ML and data work appears as supporting depth — it widens what I can build, but it isn't the claim until it has a paying client behind it.)
+            </div>
+
+            <div class="why-block">
+                <h4><i class="fa-solid fa-circle-question"></i> The One-Line Why — what a CV or LinkedIn alone can't fix</h4>
+                <p contenteditable="true">A CV can say "built a payroll system," but it can't prove the system is still running — only a portfolio can show the live product, the client's words, and the working demo, which is the difference between <strong>claiming</strong> production experience and <strong>demonstrating</strong> it.</p>
+            </div>
+        </section>
+
+        <!-- ═══════ Section 2: Interview Log ═══════ -->
+        <section id="interview-section">
+            <h2>2 &nbsp;AI as Thinking Partner — The Interview That Narrowed the Claim</h2>
+            <p style="font-size:0.9rem; color: var(--text-muted); margin-bottom: 1rem;" contenteditable="true">
+                Per the brief, AI acted as interviewer, not author: it asked forced-choice questions, pushed back when my answer was too broad, and I made every decision. The claim below survived two rounds.
+            </p>
+
+            <h3 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: 0.7rem;">Round 1 — the three core questions</h3>
+
+            <div class="qa-item">
+                <div class="q"><i class="fa-solid fa-circle-question"></i><p contenteditable="true">Q1. In the next 12 months, which outcome would you genuinely be most disappointed to miss? <span style="font-weight:400; color: var(--text-muted);">(more freelance clients &bull; remote junior AI/ML role &bull; competitive internship)</span></p></div>
+                <div class="a"><i class="fa-solid fa-circle-check"></i><p contenteditable="true"><strong>More freelance clients</strong> — another engagement like DG Cement: a business owner paying me to build a real system while I finish my degree. → This decided the ONE person: someone who buys freelance software, not a recruiter.</p></div>
+            </div>
+            <div class="qa-item">
+                <div class="q"><i class="fa-solid fa-circle-question"></i><p contenteditable="true">Q2. Which single claim could you defend in a live interview without flinching? <span style="font-weight:400; color: var(--text-muted);">(A: I ship to production &bull; B: I build AI agents &bull; C: data → decision tools)</span></p></div>
+                <div class="a"><i class="fa-solid fa-circle-check"></i><p contenteditable="true"><strong>A — "I ship to production."</strong> My anchor is software real people use daily (DG Cement, 50+ workers), not notebooks or demos.</p></div>
+            </div>
+            <div class="qa-item">
+                <div class="q"><i class="fa-solid fa-circle-question"></i><p contenteditable="true">Q3. When your ideal person finishes scrolling, what is the ONE action you want? <span style="font-weight:400; color: var(--text-muted);">(email inquiry &bull; book a call &bull; download CV &bull; try a live project)</span></p></div>
+                <div class="a"><i class="fa-solid fa-circle-check"></i><p contenteditable="true"><strong>Email me a project inquiry</strong> — a concrete scoped message. This also matches the portfolio's Scope Builder → pre-filled contact form, which exists to produce exactly this action.</p></div>
+            </div>
+
+            <div class="pushback">
+                <h4><i class="fa-solid fa-hand"></i> Round 2 — the pushback that made the claim narrow</h4>
+                <p contenteditable="true">The AI rejected my Round-1 claim as too vague: <strong>"'I ship to production' is a trait, not a named skill. Shipping WHAT, for WHOM?"</strong> It offered three sharper versions: (1) ops systems that replace paper — DG Cement is the exact proof; (2) deployed AI/data tools — matches my certifications but my only <em>paying</em> client wasn't an AI project, so the claim would run ahead of the proof; (3) ops now, AI as depth.</p>
+                <p contenteditable="true"><strong>My decision: option 3 — "Ops now, AI as depth."</strong> The honesty move: the claim is anchored to what a client has actually paid for, not to what I'm certified in. The person was sharpened the same way: not "freelance clients" (that's everyone) but <em>an operations manager at an industrial SME</em> — owns a painful manual process, has budget, cares that it works offline in the field, not about tech stacks.</p>
+            </div>
+
+            <div class="cut-list">
+                <h3><i class="fa-solid fa-scissors" style="color:#ef4444; margin-right:0.4rem;"></i>What got cut, and why</h3>
+                <div class="cut-item"><i class="fa-solid fa-scissors"></i><div contenteditable="true"><strong>Three audiences → one.</strong> <span>My portfolio planning doc targeted recruiters + freelance clients + peers. This assignment forced a ranking: the freelance client first; the others still visit, but the claim isn't written for them.</span></div></div>
+                <div class="cut-item"><i class="fa-solid fa-scissors"></i><div contenteditable="true"><strong>Four service labels → one claim.</strong> <span>"AI &amp; ML Engineer / Data Systems Architect / Full-Stack Developer / BI Analyst" is four skills hiding behind "and." Only one is THE claim.</span></div></div>
+                <div class="cut-item"><i class="fa-solid fa-scissors"></i><div contenteditable="true"><strong>"I build AI agents" as the headline.</strong> <span>True but commercially unproven — it stays as supporting depth until a paying client backs it.</span></div></div>
+            </div>
+        </section>
+
+        <!-- ═══════ Section 3: Evidence (optional screenshots) ═══════ -->
+        <section id="evidence-section">
+            <h2>3 &nbsp;Evidence — Interview Screenshots <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 400;">(optional — auto-hidden from the PDF if empty)</span></h2>
+            <div class="evidence-label"><span class="req">optional</span> AI interview — questions &amp; answers</div>
+            <div class="gallery-controls">
+                <div class="gallery-hint"><i class="fa-solid fa-circle-info"></i> Add screenshots of the AI interview session in reading order — they print stacked and numbered.</div>
+                <button class="btn btn-secondary" id="add-shots-btn" style="padding: 0.4rem 0.9rem; font-size: 0.82rem;">
+                    <i class="fa-solid fa-plus"></i> Add Screenshots
+                </button>
+            </div>
+            <div class="multi-drop" id="multi-drop-zone">
+                <i class="fa-solid fa-images"></i>
+                <p>Drop multiple screenshots here (or click)</p>
+                <span>PNG/JPG &bull; select several files at once &bull; sorted by filename</span>
+            </div>
+            <input type="file" id="multi-file-input" accept="image/*" multiple style="display:none;">
+            <div class="gallery" id="interview-gallery"></div>
+        </section>
+
+        <!-- ═══════ Section 4: Self-check ═══════ -->
+        <section id="check-section">
+            <h2>4 &nbsp;Pass / Revise Self-Check</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">Criterion</th>
+                            <th style="width: 50%;">Verification</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td contenteditable="true">One primary claim is named, not three skills hiding behind "and"</td>
+                            <td contenteditable="true">"Production business systems that replace paper processes" — a named skill; AI/ML explicitly demoted to supporting depth in the statement itself (§1)</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">The audience is a specific person who could hire me, not "everyone"</td>
+                            <td contenteditable="true">An operations manager at an industrial SME — modeled on the real DG Cement site manager who already paid for this work (§1)</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">A single most-important action is chosen</td>
+                            <td contenteditable="true">Email me a scoped project inquiry — chosen over call / CV download / follow in the interview (§2, Q3)</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">The statement could only describe MY proof, not any portfolio</td>
+                            <td contenteditable="true">"50+ workers, offline-first PWA, 28 endpoints, replaced 100% of paper payroll at a cement firm" — verifiable specifics no other portfolio can claim (§1)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>FL-02 What Are You Proving? &bull; Generated for FlyRank Track Evaluation</p>
+        </footer>
+
+        <!-- Print Footer (only visible on printed PDF) -->
+        <div class="print-footer">
+            <span>Prepared for FlyRank Evaluation Track</span>
+            <span id="print-date"></span>
+        </div>
+    </div>
+
+    <!-- Scripting -->
+    <script>
+        const themeBtn = document.getElementById('theme-btn');
+        const printBtn = document.getElementById('print-btn');
+
+        // Theme toggle
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            themeBtn.innerHTML = isLight
+                ? '<i class="fa-solid fa-moon"></i> Toggle Dark Theme'
+                : '<i class="fa-solid fa-sun"></i> Toggle Light Theme (for Print)';
+        });
+
+        // Print
+        printBtn.addEventListener('click', () => {
+            const wasLight = document.body.classList.contains('light-theme');
+            if (!wasLight) document.body.classList.add('light-theme');
+            window.print();
+            if (!wasLight) document.body.classList.remove('light-theme');
+        });
+
+        // ---- Multi-upload gallery (optional interview evidence) ----
+        const multiDrop = document.getElementById('multi-drop-zone');
+        const multiInput = document.getElementById('multi-file-input');
+        const gallery = document.getElementById('interview-gallery');
+        const addShotsBtn = document.getElementById('add-shots-btn');
+
+        addShotsBtn.addEventListener('click', () => multiInput.click());
+        multiDrop.addEventListener('click', () => multiInput.click());
+        multiDrop.addEventListener('dragover', (e) => { e.preventDefault(); multiDrop.style.borderColor = 'var(--accent)'; });
+        multiDrop.addEventListener('dragleave', () => { multiDrop.style.borderColor = 'var(--border-color)'; });
+        multiDrop.addEventListener('drop', (e) => {
+            e.preventDefault();
+            multiDrop.style.borderColor = 'var(--border-color)';
+            addFiles(e.dataTransfer.files);
+        });
+        multiInput.addEventListener('change', (e) => { addFiles(e.target.files); multiInput.value = ''; });
+
+        function addFiles(fileList) {
+            const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+            if (files.length === 0) { alert('Please upload image files (PNG, JPG, etc.).'); return; }
+            files.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => appendGalleryItem(e.target.result, file.name);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function appendGalleryItem(src, name) {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.innerHTML =
+                '<div class="g-bar">' +
+                    '<span class="g-label"></span>' +
+                    '<span style="display:flex;align-items:center;gap:0.6rem;">' +
+                        '<span style="font-size:0.7rem;opacity:0.7;">' + escapeHtml(name) + '</span>' +
+                        '<button class="g-remove" title="Remove"><i class="fa-solid fa-trash"></i></button>' +
+                    '</span>' +
+                '</div>';
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = 'Interview evidence';
+            item.appendChild(img);
+            item.querySelector('.g-remove').addEventListener('click', (e) => {
+                e.stopPropagation();
+                item.remove();
+                renumberGallery();
+            });
+            gallery.appendChild(item);
+            renumberGallery();
+        }
+
+        function renumberGallery() {
+            const items = gallery.querySelectorAll('.gallery-item');
+            items.forEach((item, idx) => {
+                item.querySelector('.g-label').textContent =
+                    'Interview Evidence ' + (idx + 1) + ' of ' + items.length;
+            });
+        }
+
+        function escapeHtml(s) {
+            return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        }
+
+        document.getElementById('print-date').textContent = "Generated on " + new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+    </script>
+</body>
+</html>
