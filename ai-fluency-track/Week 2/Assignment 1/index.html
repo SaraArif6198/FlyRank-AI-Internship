@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FL-04 — Frame It as Cases | Sara Arif</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ============ FL-04 screen additions ============ */
+
+        /* Evaluator summary (same pattern as FL-02/03) */
+        .eval-banner {
+            background: linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(217,119,6,0.08) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow);
+        }
+        .eval-banner h2 { border: none; padding-left: 0; margin-bottom: 1rem; font-size: 1.3rem; }
+        .eval-banner h2 i { color: var(--accent); margin-right: 0.5rem; }
+        .deliverable-map { width: 100%; border-collapse: collapse; }
+        .deliverable-map th, .deliverable-map td { padding: 0.6rem 0.8rem; font-size: 0.88rem; border-bottom: 1px solid var(--border-color); text-align: left; }
+        .deliverable-map th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+        .deliverable-map a { color: var(--primary-light); text-decoration: none; font-weight: 600; }
+        .deliverable-map a:hover { text-decoration: underline; }
+        .status-pill {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.2rem 0.65rem; border-radius: 20px;
+            font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        .status-done { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.35); }
+        .status-embed { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.35); }
+
+        /* Voice card */
+        .voice-card {
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--accent);
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.03);
+            padding: 1.6rem 2rem;
+        }
+        .voice-words {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.9rem;
+        }
+        .voice-words mark { background: rgba(217,119,6,0.18); color: inherit; padding: 0.05em 0.25em; border-radius: 3px; }
+        body.light-theme .voice-words mark { background: #fde9cf; }
+        .voice-rules { list-style: none; padding: 0; }
+        .voice-rules li { display: flex; gap: 0.7rem; align-items: baseline; padding: 0.35rem 0; font-size: 0.92rem; color: var(--text-muted); }
+        .voice-rules li i { color: var(--accent); flex-shrink: 0; font-size: 0.8rem; }
+        .voice-rules li strong { color: var(--text-main); }
+
+        /* Case cards — the three beats */
+        .case-card {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.02);
+            padding: 1.4rem 1.7rem;
+            margin-bottom: 1.4rem;
+        }
+        .case-card.flagship { border: 1px solid rgba(217,119,6,0.55); border-top: 4px solid var(--accent); }
+        .case-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .case-head h3 { font-family: var(--font-heading); font-size: 1.15rem; }
+        .case-tag {
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+            padding: 0.2rem 0.6rem; border-radius: 20px; white-space: nowrap;
+        }
+        .tag-proof { background: rgba(217,119,6,0.15); color: var(--accent); border: 1px solid rgba(217,119,6,0.4); }
+        .tag-work  { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.35); }
+        .beat { display: flex; gap: 0.9rem; padding: 0.55rem 0; align-items: baseline; }
+        .beat + .beat { border-top: 1px dashed var(--border-color); }
+        .beat-label {
+            flex-shrink: 0; width: 92px;
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+            color: var(--accent);
+        }
+        .beat p { font-size: 0.9rem; line-height: 1.65; color: var(--text-muted); }
+        .beat p strong { color: var(--text-main); }
+        .beat.wrinkle .beat-label { color: #10b981; }
+        .beat.wrinkle p { font-style: italic; }
+        .case-quote {
+            margin-top: 0.9rem; padding: 0.8rem 1.1rem;
+            border-left: 3px solid var(--accent); background: rgba(217,119,6,0.05);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            font-size: 0.88rem; font-style: italic; color: var(--text-muted);
+        }
+        .case-quote cite { display: block; margin-top: 0.35rem; font-size: 0.75rem; font-style: normal; }
+
+        /* Bio + CTA */
+        .bio-option {
+            border: 1px solid var(--border-color); border-radius: var(--radius);
+            background: rgba(255,255,255,0.02);
+            padding: 0.9rem 1.2rem; margin-bottom: 0.8rem;
+            font-size: 0.92rem; line-height: 1.65; color: var(--text-muted);
+            display: flex; gap: 0.8rem; align-items: baseline;
+        }
+        .bio-option i { color: var(--text-muted); flex-shrink: 0; }
+        .bio-option.picked { border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.05); color: var(--text-main); }
+        .bio-option.picked i { color: #10b981; }
+        .cta-box {
+            border: 1px dashed var(--accent); border-radius: var(--radius);
+            background: rgba(217,119,6,0.05);
+            padding: 1.1rem 1.5rem; margin-top: 1.2rem;
+        }
+        .cta-box h4 { color: var(--accent); text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+        .cta-box p { font-size: 0.92rem; line-height: 1.7; }
+        .cta-box p + p { margin-top: 0.35rem; }
+
+        /* Before / After */
+        .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+        @media (max-width: 820px) { .ba-grid { grid-template-columns: 1fr; } }
+        .ba-card { border-radius: var(--radius); padding: 1.2rem 1.4rem; }
+        .ba-card h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
+        .ba-card p { font-size: 0.93rem; line-height: 1.7; font-style: italic; }
+        .ba-before { border: 1px solid rgba(239,68,68,0.4); background: rgba(239,68,68,0.05); }
+        .ba-before h4 { color: #ef4444; }
+        .ba-before p { color: var(--text-muted); text-decoration: line-through; text-decoration-color: rgba(239,68,68,0.5); text-decoration-thickness: 1px; }
+        .ba-after { border: 1px solid rgba(16,185,129,0.4); background: rgba(16,185,129,0.05); }
+        .ba-after h4 { color: #10b981; }
+        .ba-note { margin-top: 0.9rem; font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+
+        /* Evidence gallery (same as FL-02) */
+        .evidence-label {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+            color: var(--text-muted); margin: 0 0 0.6rem 0;
+        }
+        .evidence-label .req { color: var(--accent); font-size: 0.68rem; border: 1px solid var(--accent); padding: 0.1rem 0.45rem; border-radius: 4px; }
+        .gallery-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.6rem; }
+        .gallery-hint { font-size: 0.82rem; color: var(--text-muted); }
+        .multi-drop {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.6rem; text-align: center; cursor: pointer;
+            transition: border-color 0.2s ease, background 0.2s ease;
+            background: rgba(255,255,255,0.01);
+        }
+        .multi-drop:hover { border-color: var(--accent); background: rgba(217,119,6,0.03); }
+        .multi-drop i { font-size: 2rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; }
+        .multi-drop p { font-weight: 500; font-size: 0.92rem; }
+        .multi-drop span { font-size: 0.78rem; color: var(--text-muted); }
+        .gallery { display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin-top: 1.25rem; }
+        .gallery-item { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; background: var(--bg-card); position: relative; }
+        .gallery-item .g-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.45rem 0.9rem;
+            background: rgba(0,0,0,0.18); border-bottom: 1px solid var(--border-color);
+            font-size: 0.75rem; color: var(--text-muted);
+        }
+        body.light-theme .gallery-item .g-bar { background: #f1f5f9; }
+        .gallery-item .g-bar .g-label { font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+        .gallery-item .g-remove { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 0.8rem; padding: 0.15rem 0.4rem; }
+        .gallery-item img { width: 100%; display: block; }
+
+        /* ═══════════════════════════════════════════════════════════
+           PRINT — paginated report (same architecture as FL-02/03)
+           Page 1  cover: title + evaluator summary
+           Page 2  voice card + before/after
+           Pages 3+  the cases (flagship first)
+           Then  bio & CTA + evidence (if any) + self-check
+           ═══════════════════════════════════════════════════════════ */
+        @media print {
+            @page { size: A4; margin: 1.5cm 1.4cm 1.7cm 1.4cm; }
+
+            html, body {
+                background: #ffffff !important;
+                color: #1e293b !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                font-size: 9.5pt !important;
+                line-height: 1.5 !important;
+            }
+
+            .bg-glow, .bg-glow-2, .controls-bar, footer,
+            .multi-drop, .gallery-controls, .g-remove { display: none !important; }
+
+            .container { max-width: 100% !important; margin: 0 !important; }
+
+            /* undo the base stylesheet's fixed 4-column table layout (built for FL-01) */
+            table { table-layout: auto !important; }
+            th:nth-child(1), td:nth-child(1),
+            th:nth-child(2), td:nth-child(2),
+            th:nth-child(3), td:nth-child(3),
+            th:nth-child(4), td:nth-child(4) { width: auto !important; }
+
+            section {
+                background: none !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 0 1.4rem 0 !important;
+                page-break-inside: auto !important;
+                break-inside: auto !important;
+                backdrop-filter: none !important;
+            }
+
+            .print-header {
+                display: flex !important;
+                justify-content: space-between;
+                border-bottom: 2px solid #1e3a8a;
+                padding-bottom: 5pt;
+                margin-bottom: 14pt;
+                font-size: 7.5pt;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                color: #475569;
+            }
+            .print-footer {
+                display: flex !important;
+                justify-content: space-between;
+                border-top: 1px solid #cbd5e1;
+                padding-top: 5pt;
+                margin-top: 18pt;
+                font-size: 7.5pt;
+                color: #64748b;
+            }
+
+            header { margin-bottom: 12pt !important; padding-bottom: 10pt !important; border-bottom: 1px solid #e2e8f0 !important; text-align: left !important; }
+            h1 {
+                font-size: 20pt !important;
+                background: none !important;
+                -webkit-text-fill-color: initial !important;
+                color: #0f172a !important;
+                margin-bottom: 2pt !important;
+                letter-spacing: -0.02em !important;
+            }
+            .subtitle { color: #b45309 !important; font-size: 9pt !important; letter-spacing: 0.18em !important; }
+            .meta-info { justify-content: flex-start !important; gap: 14pt !important; margin-top: 4pt !important; font-size: 8.5pt !important; color: #475569 !important; }
+            .meta-info strong { color: #0f172a !important; }
+            .profile-avatar { border-color: #b45309 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+            h2 {
+                font-size: 12.5pt !important;
+                color: #0f172a !important;
+                border-left: none !important;
+                border-bottom: 1.5px solid #1e3a8a !important;
+                padding: 0 0 4pt 0 !important;
+                margin-bottom: 10pt !important;
+                page-break-after: avoid !important;
+            }
+
+            /* page plan */
+            #voice-section    { page-break-before: always !important; break-before: page !important; }
+            #cases-section    { page-break-before: always !important; break-before: page !important; }
+            #bio-section      { page-break-before: always !important; break-before: page !important; }
+            #evidence-section { page-break-before: always !important; break-before: page !important; }
+            #check-section    { page-break-before: avoid !important; margin-top: 14pt !important; }
+
+            /* evaluator summary */
+            .eval-banner {
+                background: #ffffff !important;
+                border: 1.5px solid #1e3a8a !important;
+                border-radius: 6px !important;
+                padding: 12pt 14pt !important;
+                margin-bottom: 0 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid !important;
+            }
+            .eval-banner h2 { border-bottom: 1px solid #e2e8f0 !important; font-size: 11.5pt !important; }
+            .deliverable-map th, .deliverable-map td {
+                font-size: 8pt !important;
+                padding: 5pt 6pt !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+                vertical-align: top !important;
+            }
+            .deliverable-map th { color: #1e3a8a !important; font-size: 7pt !important; }
+            .deliverable-map th:nth-child(1), .deliverable-map td:nth-child(1) { width: 42% !important; }
+            .deliverable-map th:nth-child(2), .deliverable-map td:nth-child(2) { width: 34% !important; }
+            .deliverable-map th:nth-child(3), .deliverable-map td:nth-child(3) { width: 24% !important; }
+            .deliverable-map a { color: #1e3a8a !important; text-decoration: none !important; }
+            .status-pill {
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+                font-size: 6.5pt !important; padding: 1.5pt 5pt !important;
+            }
+            .status-done  { background: #ecfdf5 !important; color: #047857 !important; border: 0.75pt solid #047857 !important; }
+            .status-embed { background: #eff6ff !important; color: #1d4ed8 !important; border: 0.75pt solid #1d4ed8 !important; }
+
+            /* voice card */
+            .voice-card {
+                background: #ffffff !important;
+                border: 1pt solid #94a3b8 !important;
+                border-left: 4pt solid #b45309 !important;
+                padding: 12pt 14pt !important;
+                page-break-inside: avoid !important;
+            }
+            .voice-words { font-size: 14pt !important; color: #0f172a !important; }
+            .voice-words mark { background: #fde9cf !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .voice-rules li { font-size: 8.5pt !important; color: #475569 !important; padding: 2.5pt 0 !important; }
+            .voice-rules li strong { color: #0f172a !important; }
+            .voice-rules li i { color: #b45309 !important; }
+
+            /* case cards */
+            .case-card {
+                background: #ffffff !important;
+                border: 1pt solid #cbd5e1 !important;
+                padding: 9pt 12pt !important;
+                margin-bottom: 8pt !important;
+                page-break-inside: avoid !important;
+            }
+            .case-card.flagship { border: 1.25pt solid #b45309 !important; border-top: 3pt solid #b45309 !important; }
+            .case-head { margin-bottom: 6pt !important; }
+            .case-head h3 { font-size: 10.5pt !important; color: #0f172a !important; }
+            .case-tag { font-size: 6pt !important; padding: 1.5pt 5pt !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .tag-proof { background: #fff7ed !important; color: #b45309 !important; border: 0.75pt solid #b45309 !important; }
+            .tag-work  { background: #eff6ff !important; color: #1d4ed8 !important; border: 0.75pt solid #1d4ed8 !important; }
+            .beat { padding: 3.5pt 0 !important; }
+            .beat + .beat { border-top: 0.75pt dashed #cbd5e1 !important; }
+            .beat-label { width: 70pt !important; font-size: 6.5pt !important; color: #b45309 !important; }
+            .beat p { font-size: 8.5pt !important; color: #475569 !important; }
+            .beat p strong { color: #0f172a !important; }
+            .beat.wrinkle .beat-label { color: #047857 !important; }
+            .case-quote {
+                background: #fffbf5 !important;
+                border-left: 2.5pt solid #b45309 !important;
+                padding: 6pt 9pt !important; margin-top: 6pt !important;
+                font-size: 8pt !important; color: #475569 !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .case-quote cite { font-size: 6.5pt !important; }
+
+            /* bio + CTA */
+            .bio-option {
+                background: #ffffff !important;
+                border: 1pt solid #cbd5e1 !important;
+                padding: 6pt 9pt !important; margin-bottom: 5pt !important;
+                font-size: 8.5pt !important; color: #475569 !important;
+                page-break-inside: avoid !important;
+            }
+            .bio-option.picked {
+                border: 1pt solid #047857 !important;
+                background: #ecfdf5 !important;
+                color: #0f172a !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .bio-option.picked i { color: #047857 !important; }
+            .cta-box {
+                background: #fffbf5 !important;
+                border: 1pt dashed #b45309 !important;
+                padding: 9pt 12pt !important; margin-top: 8pt !important;
+                page-break-inside: avoid !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .cta-box h4 { color: #b45309 !important; font-size: 7.5pt !important; }
+            .cta-box p { font-size: 8.5pt !important; color: #1e293b !important; }
+
+            /* before / after */
+            .ba-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 8pt !important; }
+            .ba-card { padding: 8pt 10pt !important; page-break-inside: avoid !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .ba-before { background: #fef2f2 !important; border: 1pt solid #fca5a5 !important; }
+            .ba-before h4 { color: #dc2626 !important; font-size: 7pt !important; }
+            .ba-after { background: #ecfdf5 !important; border: 1pt solid #6ee7b7 !important; }
+            .ba-after h4 { color: #047857 !important; font-size: 7pt !important; }
+            .ba-card p { font-size: 8.5pt !important; color: #1e293b !important; }
+            .ba-note { font-size: 8pt !important; color: #64748b !important; margin-top: 6pt !important; }
+
+            /* evidence gallery */
+            .evidence-label { font-size: 8.5pt !important; color: #1e293b !important; margin: 0 0 4pt 0 !important; page-break-after: avoid !important; }
+            .evidence-label .req { color: #b45309 !important; border-color: #b45309 !important; font-size: 6pt !important; }
+            .gallery { gap: 8pt !important; margin-top: 4pt !important; }
+            .gallery-item {
+                border: 1pt solid #94a3b8 !important;
+                border-radius: 4px !important;
+                background: #ffffff !important;
+                page-break-inside: avoid !important;
+            }
+            .gallery-item .g-bar {
+                background: #f1f5f9 !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+                color: #1e3a8a !important;
+                font-size: 6.5pt !important;
+                padding: 3pt 8pt !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .gallery-item img { max-height: 470pt !important; width: auto !important; max-width: 100% !important; margin: 0 auto !important; object-fit: contain !important; }
+            #evidence-section:has(.gallery:empty) { display: none !important; }
+
+            /* self-check table */
+            #check-section table { width: 100% !important; }
+            #check-section th, #check-section td {
+                font-size: 8.5pt !important;
+                padding: 6pt 8pt !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+                vertical-align: top !important;
+            }
+            #check-section th { color: #1e3a8a !important; }
+            #check-section th:nth-child(1), #check-section td:nth-child(1) { width: 50% !important; }
+            #check-section th:nth-child(2), #check-section td:nth-child(2) { width: 50% !important; }
+            #check-section tbody tr td:first-child { font-weight: 600 !important; color: #0f172a !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="container">
+        <!-- Print Header (only visible on printed PDF) -->
+        <div class="print-header">
+            <span>Sara Arif &bull; Framed Case Studies</span>
+            <span>Document Code: FL-04 &bull; Week 2 &bull; Phase: Foundations</span>
+        </div>
+
+        <!-- Header -->
+        <header>
+            <span class="subtitle">Week 2 &bull; Assignment 1</span>
+            <h1 contenteditable="true" spellcheck="false">Frame It as Cases</h1>
+            <div class="meta-info">
+                <div class="meta-item">Track: <strong>General AI Fluency</strong></div>
+                <div class="meta-item">Week: <strong>2</strong> &bull; Phase: <strong>Foundations</strong></div>
+                <div class="meta-item student-profile">
+                    <img src="sara arif.png" alt="Sara Arif" class="profile-avatar">
+                    <span>Student: <strong contenteditable="true" id="student-name">Sara Arif</strong></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Interactive Controls -->
+        <div class="controls-bar">
+            <div class="control-label">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Double-click text to edit &bull; add the Claude Project voice-card screenshot in §5 &bull; then Print / Save as PDF.</span>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="theme-btn">
+                    <i class="fa-solid fa-sun"></i> Toggle Light Theme (for Print)
+                </button>
+                <button class="btn btn-primary" id="print-btn">
+                    <i class="fa-solid fa-print"></i> Print / Save as PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- ═══════ EVALUATOR SUMMARY ═══════ -->
+        <div class="eval-banner" id="evaluator-summary">
+            <h2><i class="fa-solid fa-clipboard-check"></i>Evaluator Summary — Deliverables &amp; Where to Find Them</h2>
+            <table class="deliverable-map">
+                <thead>
+                    <tr>
+                        <th style="width:42%;">Required deliverable (per brief)</th>
+                        <th style="width:34%;">Location in this document</th>
+                        <th style="width:24%;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Voice card (5–7 words) added to Claude Project as a standing instruction</td>
+                        <td><a href="#voice-section">§1 Voice Card</a> + screenshot in <a href="#evidence-section">§5</a></td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> Complete</span></td>
+                    </tr>
+                    <tr>
+                        <td>A framed case for every piece the sitemap calls for — three beats each</td>
+                        <td><a href="#cases-section">§2 The Cases</a> — flagship Proof + 7 Work builds</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> 8 of 8</span></td>
+                    </tr>
+                    <tr>
+                        <td>Bio + contact/CTA copy in my voice</td>
+                        <td><a href="#bio-section">§3 Bio &amp; CTA</a> — 3 options, one picked</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> Complete</span></td>
+                    </tr>
+                    <tr>
+                        <td>One before/after: generic AI line vs. my edited version</td>
+                        <td><a href="#ba-section">§4 Before / After</a></td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> Complete</span></td>
+                    </tr>
+                    <tr>
+                        <td>AI as interviewer, not author — one question at a time; edited hard</td>
+                        <td>Full transcripts in <code>interview_log.md</code>; AI's cut guesses noted in <a href="#cases-section">§2</a></td>
+                        <td><span class="status-pill status-embed"><i class="fa-solid fa-comments"></i> Documented</span></td>
+                    </tr>
+                    <tr>
+                        <td>Posted to track thread</td>
+                        <td>Thread post text ready in <code>thread_post.md</code></td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> Ready</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ═══════ Section 1: Voice Card ═══════ -->
+        <section id="voice-section">
+            <h2>1 &nbsp;The Voice Card — Standing Instruction in My Claude Project</h2>
+            <div class="voice-card">
+                <div class="voice-words" contenteditable="true"><mark>Direct, plain, specific, honest, no buzzwords.</mark></div>
+                <ul class="voice-rules">
+                    <li><i class="fa-solid fa-angle-right"></i><span contenteditable="true"><strong>Short sentences. Numbers over adjectives.</strong> "50+ workers, 70% less payroll time" — never "significant improvements."</span></li>
+                    <li><i class="fa-solid fa-ban"></i><span contenteditable="true"><strong>Banned:</strong> "passionate," "results-driven," "dynamic," "leveraged," "spearheaded," "cutting-edge."</span></li>
+                    <li><i class="fa-solid fa-quote-left"></i><span contenteditable="true"><strong>Words that are mine:</strong> "in production, not demos" &bull; "offline-first" &bull; "replace paper" &bull; "it still runs today."</span></li>
+                    <li><i class="fa-solid fa-scale-balanced"></i><span contenteditable="true"><strong>Every claim gets a number or a name behind it</strong> — or it gets cut. One honest wrinkle stays in every story.</span></li>
+                    <li><i class="fa-solid fa-user-check"></i><span contenteditable="true"><strong>The test:</strong> if a line sounds like a generic AI bio, rewrite it the way I'd say it to the DG Cement site manager across a table.</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ═══════ Section 2: The Cases ═══════ -->
+        <section id="cases-section">
+            <h2>2 &nbsp;The Cases — Every Piece the Sitemap Calls For, in Three Beats</h2>
+            <p style="font-size:0.9rem; color: var(--text-muted); margin-bottom: 1.2rem;" contenteditable="true">
+                Per the brief: AI interviewed me one question at a time per project (transcripts in <code>interview_log.md</code>), then drafted from my answers only. I cut its guesses — "100+ workers" (it's 50+), "bulletproof guardrail" (it's a first layer), a PHP stack it assumed for the inventory system (it's C#/SQL Server), and an invented dashboard insight. Each case ends with the honest wrinkle: what I'd do differently.
+            </p>
+
+            <!-- Case 1 — flagship -->
+            <div class="case-card flagship">
+                <div class="case-head">
+                    <h3 contenteditable="true">Case 1 · DG Cement Payroll &amp; Attendance System</h3>
+                    <span class="case-tag tag-proof">Proof · Flagship · Paying Client</span>
+                </div>
+                <div class="beat"><div class="beat-label">The problem</div><p contenteditable="true">A cement contractor paid <strong>50+ construction workers off paper registers</strong> — attendance handwritten at remote sites, retyped, totaled manually. Payroll ate most of the site manager's day every week, and workers disputed totals because nobody trusted the registers.</p></div>
+                <div class="beat"><div class="beat-label">What I did</div><p contenteditable="true">Built an <strong>offline-first PWA</strong> — the decision everything hung on, because the sites barely have signal. Attendance recorded on-device, synced when connected; PHP/MySQL, 28 API endpoints, audit logs on every change. <strong>The 26-day payroll formula I did by hand, not with AI</strong> — matched the site manager's manual calculation exactly, because payroll off by one rupee starts a labour dispute. My first sync design assumed longer connectivity windows than reality; I reworked it until a device could go a full shift offline without losing a record.</p></div>
+                <div class="beat"><div class="beat-label">What came of it</div><p contenteditable="true"><strong>In production, and I still support it today.</strong> 50+ workers logged daily &bull; weekly payroll processing time down 70%+ &bull; zero data loss during outages.</p></div>
+                <div class="beat wrinkle"><div class="beat-label">Next time</div><p contenteditable="true">Log the before-state formally, so "70% faster" isn't the only number I can defend.</p></div>
+                <div class="case-quote" contenteditable="true">
+                    "Payroll used to take me the whole day — now it's done in a couple of hours, and there are no more arguments over attendance. And she didn't disappear after delivery."
+                    <cite>— Site Manager, DG Cement project (paraphrased; name withheld on request)</cite>
+                </div>
+            </div>
+
+            <!-- Case 2 -->
+            <div class="case-card">
+                <div class="case-head">
+                    <h3 contenteditable="true">Case 2 · The AI Core</h3>
+                    <span class="case-tag tag-work">Work · Built in This Internship</span>
+                </div>
+                <div class="beat"><div class="beat-label">The problem</div><p contenteditable="true">Most "AI backends" are a chat wrapper: prompt in, text out, hope for the best. The task: a backend that behaves like <strong>production software</strong> — answering questions over a private database of 14 research papers, where the LLM decides which tools to run, including writing its own SQL.</p></div>
+                <div class="beat"><div class="beat-label">What I did</div><p contenteditable="true">Treated the model as <strong>untrusted input, same as any user</strong>. Every SQL query it writes passes a guardrail: comments stripped, forced to start with <code>select</code>, locked to one table, 17 blacklisted patterns — no mutations, no <code>pragma</code>, no schema introspection, no chained statements. Output validated against a schema; a non-conforming answer returns an explicit <strong>422</strong> instead of passing garbage downstream. Provider-agnostic via gateway: Gemini, Groq, or Claude swapped with one env variable.</p></div>
+                <div class="beat"><div class="beat-label">What came of it</div><p contenteditable="true"><strong>51 unit tests pass, 22 of them security tests — 16 malicious queries blocked.</strong> An internship build, not client work, labeled that way. What it shows: validate in, sanitize the middle, validate out.</p></div>
+                <div class="beat wrinkle"><div class="beat-label">Next time</div><p contenteditable="true">Validate the SQL structurally (parse it, not pattern-match it) — keyword filters are a first layer, not a wall.</p></div>
+            </div>
+
+            <!-- Case 3 -->
+            <div class="case-card">
+                <div class="case-head">
+                    <h3 contenteditable="true">Case 3 · AURA — LLM Chat Interface</h3>
+                    <span class="case-tag tag-work">Work · Depth</span>
+                </div>
+                <div class="beat"><div class="beat-label">The problem</div><p contenteditable="true">A chat interface where multiple conversation threads stay truly separate. With LangGraph and a SQLite checkpointer under concurrent access, they didn't — <strong>state bled between threads</strong>.</p></div>
+                <div class="beat"><div class="beat-label">What I did</div><p contenteditable="true">Built on LangGraph StateGraph with persistent SQLite checkpointing, then spent the hard part <strong>diagnosing the thread-isolation failure by hand</strong> — AI brainstormed edge cases, the concurrency verification was mine. Also made it survive the real world: provider 404s and rate limits trigger fallbacks instead of killing the chat.</p></div>
+                <div class="beat"><div class="beat-label">What came of it</div><p contenteditable="true">A working multi-threaded chat with persistent, isolated conversations. <strong>Runs locally, code on GitHub, I'm the only user</strong> — no client behind it; it lives in the portfolio as depth, labeled exactly that.</p></div>
+                <div class="beat wrinkle"><div class="beat-label">Next time</div><p contenteditable="true">Load-test the checkpointer before building UI on top of it, not after.</p></div>
+            </div>
+
+            <!-- Case 4 -->
+            <div class="case-card">
+                <div class="case-head">
+                    <h3 contenteditable="true">Case 4 · DataSage — Multi-Agent EDA Pipeline</h3>
+                    <span class="case-tag tag-work">Work · Depth</span>
+                </div>
+                <div class="beat"><div class="beat-label">The problem</div><p contenteditable="true">Exploratory data analysis is the same loop every time — profile, find what matters, explain, chart. Doing it by hand per CSV is slow; most automated tools <strong>crash the moment the data is dirty</strong>.</p></div>
+                <div class="beat"><div class="beat-label">What I did</div><p contenteditable="true">A three-node LangGraph pipeline — analysis, narrative, visualization — passing structured JSON validated against the frontend's schema. Two decisions I'd defend: <strong>structured error states for empty/corrupted CSVs</strong> instead of crashes (I generated hostile test data — nulls, outliers — specifically to attack it), and the full run in <strong>under 15 seconds</strong>, because a tool people wait minutes for doesn't get used.</p></div>
+                <div class="beat"><div class="beat-label">What came of it</div><p contenteditable="true">Holds both targets on real data, not just my synthetic attacks — ran against <strong>public Kaggle datasets</strong>, stayed under 15s end-to-end, no crashes. Portfolio-depth build, honestly labeled.</p></div>
+                <div class="beat wrinkle"><div class="beat-label">Next time</div><p contenteditable="true">A real business's data, where the mess isn't curated — Kaggle data is public and half-cleaned; a client's export is neither.</p></div>
+            </div>
+
+            <!-- Case 5 -->
+            <div class="case-card">
+                <div class="case-head">
+                    <h3 contenteditable="true">Case 5 · Inventory Management System</h3>
+                    <span class="case-tag tag-work">Work · Ops</span>
+                </div>
+                <div class="beat"><div class="beat-label">The problem</div><p contenteditable="true">Small shops run stock the way the cement contractor ran payroll: counts in a register, sales in someone's head, and <strong>nobody notices an item is out until a customer asks for it</strong>. Built as a portfolio build modeled on how a real shop operates — labeled that way.</p></div>
+                <div class="beat"><div class="beat-label">What I did</div><p contenteditable="true">A desktop system in <strong>C# on SQL Server</strong>. The cashier gets exactly one screen — the POS; every sale decrements stock automatically. The admin gets everything else: low-stock alerts, PDF/CSV reports, and an <strong>audit log on every stock change</strong> — who touched it and when — because unexplained stock movement is the whole problem. Two decisions: <strong>role-based access</strong> (a cashier who can edit inventory is an audit hole, so they can't), and an <strong>AI chatbot</strong> that answers "what's in stock?" in plain language and auto-fills restock entries when something runs out.</p></div>
+                <div class="beat"><div class="beat-label">What came of it</div><p contenteditable="true">A complete working system: POS, alerts, audit trail, reports, chatbot. No paying shop behind it yet — the build I point an ops manager to when they ask <strong>"can you do inventory, not just payroll?"</strong></p></div>
+                <div class="beat wrinkle"><div class="beat-label">Next time</div><p contenteditable="true">Put it in one real shop for a month before calling it done — the register it replaces will teach me things my test data can't.</p></div>
+            </div>
+
+            <!-- Case 6 -->
+            <div class="case-card">
+                <div class="case-head">
+                    <h3 contenteditable="true">Case 6 · Customer Trends ETL</h3>
+                    <span class="case-tag tag-work">Work · Data</span>
+                </div>
+                <div class="beat"><div class="beat-label">The problem</div><p contenteditable="true">Raw customer data doesn't answer questions — it's <strong>nulls, inconsistent formats, and duplicates pretending to be a dataset</strong>. I wanted the pipeline that turns that mess into a trend you can act on, end to end.</p></div>
+                <div class="beat"><div class="beat-label">What I did</div><p contenteditable="true">An extract-transform-load pipeline over a public customer dataset: cleaned and standardized the raw data (nulls handled explicitly, formats normalized, duplicates resolved — <strong>the unglamorous 80%</strong>), loaded into a queryable store, trend analysis with visualizations on top. The decision that mattered: <strong>cleaning as its own auditable stage</strong> — when a number looks wrong downstream, I can point to exactly what the transform did to it.</p></div>
+                <div class="beat"><div class="beat-label">What came of it</div><p contenteditable="true">A working pipeline from raw file to trend charts. Public data, so I claim the engineering, not a business outcome: the same pipeline pointed at a client's sales export is how <strong>"which customers are slipping away?"</strong> gets answered.</p></div>
+                <div class="beat wrinkle"><div class="beat-label">Next time</div><p contenteditable="true">Run it on data someone actually needs an answer from — trends only matter when a decision hangs on them.</p></div>
+            </div>
+
+            <!-- Case 7 -->
+            <div class="case-card">
+                <div class="case-head">
+                    <h3 contenteditable="true">Case 7 · Mobile Expense Tracker</h3>
+                    <span class="case-tag tag-work">Work · In Daily Use</span>
+                </div>
+                <div class="beat"><div class="beat-label">The problem</div><p contenteditable="true">My own money was leaking the way most students' does — small expenses, untracked, remembered wrong. Notes apps don't add up columns, and <strong>every tracker app I tried wanted an account and a connection</strong>.</p></div>
+                <div class="beat"><div class="beat-label">What I did</div><p contenteditable="true">Built my own: <strong>fully offline, data stored on-device</strong>. The same instinct as DG Cement — if the tool needs a connection to record a 50-rupee entry, it won't get used, and expense data is nobody's business but mine anyway.</p></div>
+                <div class="beat"><div class="beat-label">What came of it</div><p contenteditable="true"><strong>It's on my phone and I log expenses in it regularly.</strong> One real daily user — me — which is one more than most portfolio apps get. The smallest demonstration of the pattern I sell: offline-first, on-device, built around how the person actually behaves.</p></div>
+                <div class="beat wrinkle"><div class="beat-label">Next time</div><p contenteditable="true">Add an export — my own data is now locked on one device, the exact problem I build my way out of for clients.</p></div>
+            </div>
+
+            <!-- Case 8 -->
+            <div class="case-card">
+                <div class="case-head">
+                    <h3 contenteditable="true">Case 8 · Global Sales Dashboard</h3>
+                    <span class="case-tag tag-work">Work · Data</span>
+                </div>
+                <div class="beat"><div class="beat-label">The problem</div><p contenteditable="true">A global sales spreadsheet can tell you the total. It can't tell you at a glance <strong>which region carries the profit, which product line drags, or where the numbers head next quarter</strong> — you'd be pivot-tabling for an hour per question.</p></div>
+                <div class="beat"><div class="beat-label">What I did</div><p contenteditable="true">A <strong>Streamlit dashboard with Plotly charts</strong> over a public global sales dataset. The design decision that mattered: <strong>interactive filters</strong> — year, region, category — so the reader interrogates the data instead of scrolling a report. One step past describing the past: <strong>time-series forecasting</strong>, so it projects where sales are heading, not just what sold.</p></div>
+                <div class="beat"><div class="beat-label">What came of it</div><p contenteditable="true">One screen that answers the region/product-mix question the spreadsheet couldn't, with a forecast attached. Public data, so the claim is the capability: <strong>what "reports" means beyond a PDF</strong>.</p></div>
+                <div class="beat wrinkle"><div class="beat-label">Next time</div><p contenteditable="true">Validate the forecast against a held-out period and show the error on the chart — a projection without its error bar is a guess in a suit.</p></div>
+            </div>
+        </section>
+
+        <!-- ═══════ Section 3: Bio & CTA ═══════ -->
+        <section id="bio-section">
+            <h2>3 &nbsp;Bio &amp; Contact/CTA Copy — In the Voice Card's Voice</h2>
+            <p style="font-size:0.9rem; color: var(--text-muted); margin-bottom: 1rem;" contenteditable="true">Three options drafted from my proof statement; I picked one. The bio says what I do and who for — not a list of adjectives.</p>
+
+            <div class="bio-option"><i class="fa-regular fa-circle"></i><span contenteditable="true"><strong>Option 1.</strong> I build the software that replaces paper. Payroll, attendance, inventory — systems that run offline in the field and are still running after I hand them over.</span></div>
+            <div class="bio-option picked"><i class="fa-solid fa-circle-check"></i><span contenteditable="true"><strong>Option 2 — picked.</strong> I turn manual business processes into working software — like the payroll system 50+ construction workers use every day at remote sites with no signal. If your process lives in a register or a spreadsheet, I've probably replaced one like it. <em style="font-size:0.82rem;">(Picked: it names the reader's pain and carries the proof in the same breath.)</em></span></div>
+            <div class="bio-option"><i class="fa-regular fa-circle"></i><span contenteditable="true"><strong>Option 3.</strong> I'm a software architect who ships to production while finishing a CS degree. My proof isn't a certificate — it's a payroll system a cement contractor has trusted with real wages, every week, since launch.</span></div>
+
+            <div class="cta-box">
+                <h4><i class="fa-solid fa-envelope"></i> Contact / CTA copy — the one action</h4>
+                <p contenteditable="true"><strong>Section heading:</strong> What process do you want to replace?</p>
+                <p contenteditable="true"><strong>Body line:</strong> Tell me the process that's eating your week — the Scope Builder above will shape it into a brief, or just email me directly. I reply within two working days.</p>
+                <p contenteditable="true"><strong>Button:</strong> Email me a project inquiry</p>
+            </div>
+        </section>
+
+        <!-- ═══════ Section 4: Before / After ═══════ -->
+        <section id="ba-section">
+            <h2>4 &nbsp;Before / After — Generic AI Line vs. My Edit</h2>
+            <div class="ba-grid">
+                <div class="ba-card ba-before">
+                    <h4><i class="fa-solid fa-robot"></i> Before — what the AI first drafted</h4>
+                    <p contenteditable="true">"I'm a passionate, results-driven software engineer who leverages cutting-edge technologies to deliver innovative, scalable solutions that exceed client expectations."</p>
+                </div>
+                <div class="ba-card ba-after">
+                    <h4><i class="fa-solid fa-user-pen"></i> After — my edit, per the voice card</h4>
+                    <p contenteditable="true">"I build the software that replaces paper. The proof: a payroll system 50+ construction workers use daily at sites with no signal — zero data lost, payroll day cut by 70%, still running."</p>
+                </div>
+            </div>
+            <p class="ba-note" contenteditable="true">The before could hang on ten thousand portfolios. The after could only be mine — it has a number, a place, and a claim I can defend line by line.</p>
+        </section>
+
+        <!-- ═══════ Section 5: Evidence (screenshots) ═══════ -->
+        <section id="evidence-section">
+            <h2>5 &nbsp;Evidence — Screenshots <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 400;">(auto-hidden from the PDF if empty)</span></h2>
+            <div class="evidence-label"><span class="req">required</span> Voice card as a standing instruction in the Claude Project &bull; <span style="text-transform:none; font-weight:400;">optional: interview sessions</span></div>
+            <div class="gallery-controls">
+                <div class="gallery-hint"><i class="fa-solid fa-circle-info"></i> Add the Claude Project custom-instructions screenshot first, then any interview screenshots — they print stacked and numbered.</div>
+                <button class="btn btn-secondary" id="add-shots-btn" style="padding: 0.4rem 0.9rem; font-size: 0.82rem;">
+                    <i class="fa-solid fa-plus"></i> Add Screenshots
+                </button>
+            </div>
+            <div class="multi-drop" id="multi-drop-zone">
+                <i class="fa-solid fa-images"></i>
+                <p>Drop multiple screenshots here (or click)</p>
+                <span>PNG/JPG &bull; select several files at once &bull; sorted by filename</span>
+            </div>
+            <input type="file" id="multi-file-input" accept="image/*" multiple style="display:none;">
+            <div class="gallery" id="evidence-gallery"></div>
+        </section>
+
+        <!-- ═══════ Section 6: Self-check ═══════ -->
+        <section id="check-section">
+            <h2>6 &nbsp;Pass / Revise Self-Check</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">Criterion</th>
+                            <th style="width: 50%;">Verification</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td contenteditable="true">A framed case exists for each piece the sitemap calls for — not a bare screenshot or a title</td>
+                            <td contenteditable="true">8 of 8: flagship Proof (DG Cement) + all Work-section builds from the FL-03 v2 sitemap, including this internship's build (The AI Core) — each a full story, no bare titles (§2)</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">Each case has the three beats and could only describe my project</td>
+                            <td contenteditable="true">Problem → what I did/decided → what came of it, plus a "next time" wrinkle in every case; "26-day payroll formula matched by hand" and "16 malicious queries blocked" describe nobody else's work (§2)</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">Sounds like a specific person; the before/after shows the difference from generic AI copy</td>
+                            <td contenteditable="true">Voice card enforced as a standing instruction (§1, screenshot §5); before/after is the same claim in generic vs. mine (§4); AI's guesses were cut, not kept (noted in §2 intro)</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">Speaks to the one audience, points at the one action; tight, no "results-driven" filler</td>
+                            <td contenteditable="true">Every case faces the ops manager at an industrial SME; single CTA — email a scoped project inquiry (§3); banned-word list applied throughout, honest labels on non-client builds</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Week 2 &bull; Assignment 1 — Frame It as Cases &bull; Generated for FlyRank Track Evaluation</p>
+        </footer>
+
+        <!-- Print Footer (only visible on printed PDF) -->
+        <div class="print-footer">
+            <span>Prepared for FlyRank Evaluation Track</span>
+            <span id="print-date"></span>
+        </div>
+    </div>
+
+    <!-- Scripting -->
+    <script>
+        const themeBtn = document.getElementById('theme-btn');
+        const printBtn = document.getElementById('print-btn');
+
+        // Theme toggle
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            themeBtn.innerHTML = isLight
+                ? '<i class="fa-solid fa-moon"></i> Toggle Dark Theme'
+                : '<i class="fa-solid fa-sun"></i> Toggle Light Theme (for Print)';
+        });
+
+        // Print
+        printBtn.addEventListener('click', () => {
+            const wasLight = document.body.classList.contains('light-theme');
+            if (!wasLight) document.body.classList.add('light-theme');
+            window.print();
+            if (!wasLight) document.body.classList.remove('light-theme');
+        });
+
+        // ---- Multi-upload gallery (voice card + interview evidence) ----
+        const multiDrop = document.getElementById('multi-drop-zone');
+        const multiInput = document.getElementById('multi-file-input');
+        const gallery = document.getElementById('evidence-gallery');
+        const addShotsBtn = document.getElementById('add-shots-btn');
+
+        addShotsBtn.addEventListener('click', () => multiInput.click());
+        multiDrop.addEventListener('click', () => multiInput.click());
+        multiDrop.addEventListener('dragover', (e) => { e.preventDefault(); multiDrop.style.borderColor = 'var(--accent)'; });
+        multiDrop.addEventListener('dragleave', () => { multiDrop.style.borderColor = 'var(--border-color)'; });
+        multiDrop.addEventListener('drop', (e) => {
+            e.preventDefault();
+            multiDrop.style.borderColor = 'var(--border-color)';
+            addFiles(e.dataTransfer.files);
+        });
+        multiInput.addEventListener('change', (e) => { addFiles(e.target.files); multiInput.value = ''; });
+
+        function addFiles(fileList) {
+            const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+            if (files.length === 0) { alert('Please upload image files (PNG, JPG, etc.).'); return; }
+            files.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => appendGalleryItem(e.target.result, file.name);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function appendGalleryItem(src, name) {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.innerHTML =
+                '<div class="g-bar">' +
+                    '<span class="g-label"></span>' +
+                    '<span style="display:flex;align-items:center;gap:0.6rem;">' +
+                        '<span style="font-size:0.7rem;opacity:0.7;">' + escapeHtml(name) + '</span>' +
+                        '<button class="g-remove" title="Remove"><i class="fa-solid fa-trash"></i></button>' +
+                    '</span>' +
+                '</div>';
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = 'Evidence';
+            item.appendChild(img);
+            item.querySelector('.g-remove').addEventListener('click', (e) => {
+                e.stopPropagation();
+                item.remove();
+                renumberGallery();
+            });
+            gallery.appendChild(item);
+            renumberGallery();
+        }
+
+        function renumberGallery() {
+            const items = gallery.querySelectorAll('.gallery-item');
+            items.forEach((item, idx) => {
+                item.querySelector('.g-label').textContent =
+                    'Evidence ' + (idx + 1) + ' of ' + items.length;
+            });
+        }
+
+        function escapeHtml(s) {
+            return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        }
+
+        document.getElementById('print-date').textContent = "Generated on " + new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+    </script>
+</body>
+</html>
