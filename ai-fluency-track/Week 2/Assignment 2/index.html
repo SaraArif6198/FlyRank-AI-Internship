@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FL-05 — The Prompt Ladder | Sara Arif</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ============ FL-05 screen additions ============ */
+
+        /* Evaluator summary (same pattern as FL-02/03/04) */
+        .eval-banner {
+            background: linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(217,119,6,0.08) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow);
+        }
+        .eval-banner h2 { border: none; padding-left: 0; margin-bottom: 1rem; font-size: 1.3rem; }
+        .eval-banner h2 i { color: var(--accent); margin-right: 0.5rem; }
+        .deliverable-map { width: 100%; border-collapse: collapse; }
+        .deliverable-map th, .deliverable-map td { padding: 0.6rem 0.8rem; font-size: 0.88rem; border-bottom: 1px solid var(--border-color); text-align: left; }
+        .deliverable-map th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+        .deliverable-map a { color: var(--primary-light); text-decoration: none; font-weight: 600; }
+        .deliverable-map a:hover { text-decoration: underline; }
+        .status-pill {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.2rem 0.65rem; border-radius: 20px;
+            font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        .status-done { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.35); }
+        .status-warn { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.35); }
+
+        /* Ladder overview strip */
+        .ladder-strip { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .ladder-step {
+            flex: 1; min-width: 120px;
+            border: 1px solid var(--border-color); border-radius: var(--radius);
+            background: rgba(255,255,255,0.02);
+            padding: 0.7rem 0.9rem; text-align: center;
+        }
+        .ladder-step .l-num { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+        .ladder-step .l-name { font-family: var(--font-heading); font-size: 0.9rem; font-weight: 700; margin-top: 0.2rem; }
+        .ladder-step.l-base { border-color: rgba(148,163,184,0.5); }
+        .ladder-step.l-up { border-color: rgba(16,185,129,0.45); }
+        .ladder-step.l-up .l-name { color: #10b981; }
+        .ladder-step.l-down { border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.05); }
+        .ladder-step.l-down .l-name { color: #ef4444; }
+
+        /* Rung cards */
+        .rung {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.02);
+            padding: 1.4rem 1.7rem;
+            margin-bottom: 1.5rem;
+        }
+        .rung.rung-worse { border: 1px solid rgba(239,68,68,0.5); }
+        .rung-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .rung-head h3 { font-family: var(--font-heading); font-size: 1.12rem; }
+        .layer-tag {
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+            padding: 0.2rem 0.6rem; border-radius: 20px; white-space: nowrap;
+        }
+        .layer-base  { background: rgba(148,163,184,0.15); color: #94a3b8; border: 1px solid rgba(148,163,184,0.4); }
+        .layer-up    { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.4); }
+        .layer-down  { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.4); }
+
+        .block-label {
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--text-muted); margin: 0.9rem 0 0.4rem 0;
+        }
+        .prompt-box {
+            background: rgba(0,0,0,0.25);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.9rem 1.1rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.82rem; line-height: 1.6;
+            color: var(--text-muted);
+            white-space: pre-wrap;
+        }
+        body.light-theme .prompt-box { background: #f8fafc; }
+        .prompt-box strong { color: var(--text-main); background: rgba(217,119,6,0.15); padding: 0.05em 0.2em; border-radius: 3px; font-weight: 600; }
+        body.light-theme .prompt-box strong { background: #fde9cf; }
+        .output-box {
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--primary-light);
+            border-radius: 0 8px 8px 0;
+            background: rgba(59,130,246,0.04);
+            padding: 0.9rem 1.1rem;
+            font-size: 0.87rem; line-height: 1.65;
+            font-style: italic; color: var(--text-muted);
+        }
+        .output-box strong { color: var(--text-main); }
+        .output-box .bad { color: #ef4444; font-weight: 600; font-style: normal; }
+
+        .notes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin-top: 0.9rem; }
+        @media (max-width: 760px) { .notes-grid { grid-template-columns: 1fr; } }
+        .note-cell {
+            border: 1px solid var(--border-color); border-radius: 8px;
+            padding: 0.7rem 0.9rem; background: rgba(255,255,255,0.015);
+        }
+        .note-cell h5 {
+            font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+            margin-bottom: 0.35rem; color: var(--text-muted);
+        }
+        .note-cell.n-improved h5 { color: #10b981; }
+        .note-cell.n-failed h5 { color: #ef4444; }
+        .note-cell.n-next h5 { color: var(--accent); }
+        .note-cell p { font-size: 0.84rem; line-height: 1.6; color: var(--text-muted); }
+        .note-cell p strong { color: var(--text-main); }
+
+        /* Final prompt */
+        .final-box {
+            border: 1px solid rgba(16,185,129,0.5);
+            border-radius: var(--radius);
+            background: rgba(16,185,129,0.04);
+            padding: 1.3rem 1.6rem;
+        }
+        .final-box .prompt-box { border-color: rgba(16,185,129,0.35); }
+        .final-note { margin-top: 0.9rem; font-size: 0.87rem; color: var(--text-muted); }
+        .final-note strong { color: var(--text-main); }
+
+        /* ═══════════════════════════════════════════════════════════
+           PRINT — paginated report (same architecture as FL-02/03/04)
+           ═══════════════════════════════════════════════════════════ */
+        @media print {
+            @page { size: A4; margin: 1.5cm 1.4cm 1.7cm 1.4cm; }
+
+            html, body {
+                background: #ffffff !important;
+                color: #1e293b !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                font-size: 9.5pt !important;
+                line-height: 1.5 !important;
+            }
+
+            .bg-glow, .bg-glow-2, .controls-bar, footer { display: none !important; }
+
+            .container { max-width: 100% !important; margin: 0 !important; }
+
+            /* undo the base stylesheet's fixed 4-column table layout (built for FL-01) */
+            table { table-layout: auto !important; }
+            th:nth-child(1), td:nth-child(1),
+            th:nth-child(2), td:nth-child(2),
+            th:nth-child(3), td:nth-child(3),
+            th:nth-child(4), td:nth-child(4) { width: auto !important; }
+
+            section {
+                background: none !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 0 1.4rem 0 !important;
+                page-break-inside: auto !important;
+                break-inside: auto !important;
+                backdrop-filter: none !important;
+            }
+
+            .print-header {
+                display: flex !important;
+                justify-content: space-between;
+                border-bottom: 2px solid #1e3a8a;
+                padding-bottom: 5pt;
+                margin-bottom: 14pt;
+                font-size: 7.5pt;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                color: #475569;
+            }
+            .print-footer {
+                display: flex !important;
+                justify-content: space-between;
+                border-top: 1px solid #cbd5e1;
+                padding-top: 5pt;
+                margin-top: 18pt;
+                font-size: 7.5pt;
+                color: #64748b;
+            }
+
+            header { margin-bottom: 12pt !important; padding-bottom: 10pt !important; border-bottom: 1px solid #e2e8f0 !important; text-align: left !important; }
+            h1 {
+                font-size: 20pt !important;
+                background: none !important;
+                -webkit-text-fill-color: initial !important;
+                color: #0f172a !important;
+                margin-bottom: 2pt !important;
+                letter-spacing: -0.02em !important;
+            }
+            .subtitle { color: #b45309 !important; font-size: 9pt !important; letter-spacing: 0.18em !important; }
+            .meta-info { justify-content: flex-start !important; gap: 14pt !important; margin-top: 4pt !important; font-size: 8.5pt !important; color: #475569 !important; }
+            .meta-info strong { color: #0f172a !important; }
+            .profile-avatar { border-color: #b45309 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+            h2 {
+                font-size: 12.5pt !important;
+                color: #0f172a !important;
+                border-left: none !important;
+                border-bottom: 1.5px solid #1e3a8a !important;
+                padding: 0 0 4pt 0 !important;
+                margin-bottom: 10pt !important;
+                page-break-after: avoid !important;
+            }
+
+            /* page plan */
+            #ladder-section { page-break-before: always !important; break-before: page !important; }
+            #final-section  { page-break-before: always !important; break-before: page !important; }
+            #check-section  { page-break-before: avoid !important; margin-top: 14pt !important; }
+
+            /* evaluator summary */
+            .eval-banner {
+                background: #ffffff !important;
+                border: 1.5px solid #1e3a8a !important;
+                border-radius: 6px !important;
+                padding: 12pt 14pt !important;
+                margin-bottom: 0 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid !important;
+            }
+            .eval-banner h2 { border-bottom: 1px solid #e2e8f0 !important; font-size: 11.5pt !important; }
+            .deliverable-map th, .deliverable-map td {
+                font-size: 8pt !important;
+                padding: 5pt 6pt !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+                vertical-align: top !important;
+            }
+            .deliverable-map th { color: #1e3a8a !important; font-size: 7pt !important; }
+            .deliverable-map th:nth-child(1), .deliverable-map td:nth-child(1) { width: 42% !important; }
+            .deliverable-map th:nth-child(2), .deliverable-map td:nth-child(2) { width: 34% !important; }
+            .deliverable-map th:nth-child(3), .deliverable-map td:nth-child(3) { width: 24% !important; }
+            .deliverable-map a { color: #1e3a8a !important; text-decoration: none !important; }
+            .status-pill {
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+                font-size: 6.5pt !important; padding: 1.5pt 5pt !important;
+            }
+            .status-done { background: #ecfdf5 !important; color: #047857 !important; border: 0.75pt solid #047857 !important; }
+            .status-warn { background: #fef2f2 !important; color: #dc2626 !important; border: 0.75pt solid #dc2626 !important; }
+
+            /* ladder strip */
+            .ladder-strip { display: flex !important; gap: 4pt !important; margin-bottom: 10pt !important; }
+            .ladder-step {
+                background: #ffffff !important;
+                border: 1pt solid #cbd5e1 !important;
+                padding: 5pt 6pt !important;
+                page-break-inside: avoid !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .ladder-step .l-num { font-size: 5.5pt !important; color: #64748b !important; }
+            .ladder-step .l-name { font-size: 7.5pt !important; color: #0f172a !important; }
+            .ladder-step.l-up { border-color: #047857 !important; }
+            .ladder-step.l-up .l-name { color: #047857 !important; }
+            .ladder-step.l-down { border-color: #dc2626 !important; background: #fef2f2 !important; }
+            .ladder-step.l-down .l-name { color: #dc2626 !important; }
+
+            /* rungs */
+            .rung {
+                background: #ffffff !important;
+                border: 1pt solid #cbd5e1 !important;
+                padding: 9pt 12pt !important;
+                margin-bottom: 9pt !important;
+                page-break-inside: avoid !important;
+            }
+            .rung.rung-worse { border: 1.25pt solid #dc2626 !important; }
+            .rung-head { margin-bottom: 6pt !important; }
+            .rung-head h3 { font-size: 10.5pt !important; color: #0f172a !important; }
+            .layer-tag { font-size: 6pt !important; padding: 1.5pt 5pt !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .layer-base { background: #f1f5f9 !important; color: #475569 !important; border: 0.75pt solid #94a3b8 !important; }
+            .layer-up   { background: #ecfdf5 !important; color: #047857 !important; border: 0.75pt solid #047857 !important; }
+            .layer-down { background: #fef2f2 !important; color: #dc2626 !important; border: 0.75pt solid #dc2626 !important; }
+            .block-label { font-size: 6.5pt !important; color: #1e3a8a !important; margin: 6pt 0 3pt 0 !important; page-break-after: avoid !important; }
+            .prompt-box {
+                background: #f8fafc !important;
+                border: 0.75pt solid #cbd5e1 !important;
+                padding: 6pt 8pt !important;
+                font-size: 7.5pt !important;
+                color: #334155 !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .prompt-box strong { background: #fde9cf !important; color: #0f172a !important; }
+            .output-box {
+                background: #f8fafc !important;
+                border: 0.75pt solid #cbd5e1 !important;
+                border-left: 2.5pt solid #1e3a8a !important;
+                padding: 6pt 8pt !important;
+                font-size: 8pt !important;
+                color: #475569 !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .output-box strong { color: #0f172a !important; }
+            .output-box .bad { color: #dc2626 !important; }
+            .notes-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 4pt !important; margin-top: 6pt !important; }
+            .note-cell {
+                background: #ffffff !important;
+                border: 0.75pt solid #cbd5e1 !important;
+                padding: 5pt 7pt !important;
+                page-break-inside: avoid !important;
+            }
+            .note-cell h5 { font-size: 5.5pt !important; }
+            .note-cell.n-improved h5 { color: #047857 !important; }
+            .note-cell.n-failed h5 { color: #dc2626 !important; }
+            .note-cell.n-next h5 { color: #b45309 !important; }
+            .note-cell p { font-size: 7.5pt !important; color: #475569 !important; }
+            .note-cell p strong { color: #0f172a !important; }
+
+            /* final prompt */
+            .final-box {
+                background: #ecfdf5 !important;
+                border: 1pt solid #047857 !important;
+                padding: 9pt 12pt !important;
+                page-break-inside: avoid !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .final-note { font-size: 8pt !important; color: #475569 !important; }
+            .final-note strong { color: #0f172a !important; }
+
+            /* self-check table */
+            #check-section table { width: 100% !important; }
+            #check-section th, #check-section td {
+                font-size: 8.5pt !important;
+                padding: 6pt 8pt !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+                vertical-align: top !important;
+            }
+            #check-section th { color: #1e3a8a !important; }
+            #check-section th:nth-child(1), #check-section td:nth-child(1) { width: 50% !important; }
+            #check-section th:nth-child(2), #check-section td:nth-child(2) { width: 50% !important; }
+            #check-section tbody tr td:first-child { font-weight: 600 !important; color: #0f172a !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="container">
+        <!-- Print Header (only visible on printed PDF) -->
+        <div class="print-header">
+            <span>Sara Arif &bull; The Prompt Ladder</span>
+            <span>Document Code: FL-05 &bull; Week 2 &bull; Phase: Foundations</span>
+        </div>
+
+        <!-- Header -->
+        <header>
+            <span class="subtitle">Week 2 &bull; Assignment 2</span>
+            <h1 contenteditable="true" spellcheck="false">The Prompt Ladder</h1>
+            <div class="meta-info">
+                <div class="meta-item">Track: <strong>General AI Fluency</strong></div>
+                <div class="meta-item">Week: <strong>2</strong> &bull; Phase: <strong>Foundations</strong></div>
+                <div class="meta-item student-profile">
+                    <img src="sara arif.png" alt="Sara Arif" class="profile-avatar">
+                    <span>Student: <strong contenteditable="true" id="student-name">Sara Arif</strong></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Interactive Controls -->
+        <div class="controls-bar">
+            <div class="control-label">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Double-click text to edit &bull; then Print / Save as PDF.</span>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="theme-btn">
+                    <i class="fa-solid fa-sun"></i> Toggle Light Theme (for Print)
+                </button>
+                <button class="btn btn-primary" id="print-btn">
+                    <i class="fa-solid fa-print"></i> Print / Save as PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- ═══════ EVALUATOR SUMMARY ═══════ -->
+        <div class="eval-banner" id="evaluator-summary">
+            <h2><i class="fa-solid fa-clipboard-check"></i>Evaluator Summary — Deliverables &amp; Where to Find Them</h2>
+            <table class="deliverable-map">
+                <thead>
+                    <tr>
+                        <th style="width:42%;">Required deliverable (per brief)</th>
+                        <th style="width:34%;">Location in this document</th>
+                        <th style="width:24%;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Weak baseline from my own track, run and saved</td>
+                        <td><a href="#ladder-section">§1 Rung 0</a> — "Write a case study about my payroll project"</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> Complete</span></td>
+                    </tr>
+                    <tr>
+                        <td>Five versions, each adding exactly one named layer</td>
+                        <td><a href="#ladder-section">§1 Rungs 1–5</a> — context → audience → format → example → constraints</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> 5 of 5</span></td>
+                    </tr>
+                    <tr>
+                        <td>Output (representative excerpt) for every run, compared side by side</td>
+                        <td>Each rung card: prompt (change highlighted) + output excerpt</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> 6 runs</span></td>
+                    </tr>
+                    <tr>
+                        <td>Four notes per version — output changes, not prompt changes</td>
+                        <td>Four-cell grid under every rung</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> Complete</span></td>
+                    </tr>
+                    <tr>
+                        <td>At least one honest "this made it worse" moment</td>
+                        <td><a href="#rung4">§1 Rung 4</a> — the example layer contaminated the output; removed at Rung 5</td>
+                        <td><span class="status-pill status-warn"><i class="fa-solid fa-triangle-exclamation"></i> Rung 4</span></td>
+                    </tr>
+                    <tr>
+                        <td>Final reusable prompt a stranger could use</td>
+                        <td><a href="#final-section">§2 The Final Prompt</a> — fully parameterized</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> Complete</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ═══════ Section 1: The Ladder ═══════ -->
+        <section id="ladder-section">
+            <h2>1 &nbsp;The Ladder — Six Runs, One Layer per Rung</h2>
+            <p style="font-size:0.9rem; color: var(--text-muted); margin-bottom: 1.2rem;" contenteditable="true">
+                The weak prompt is from my own track: before Assignment 1 taught me the interview method, this is exactly what I would have typed to get portfolio copy. Each rung attacks the previous output's biggest weakness with one layer. Outputs were compared side by side — not from memory.
+            </p>
+
+            <div class="ladder-strip">
+                <div class="ladder-step l-base"><div class="l-num">Rung 0</div><div class="l-name">Baseline</div></div>
+                <div class="ladder-step l-up"><div class="l-num">Rung 1</div><div class="l-name">+ Context</div></div>
+                <div class="ladder-step l-up"><div class="l-num">Rung 2</div><div class="l-name">+ Audience</div></div>
+                <div class="ladder-step l-up"><div class="l-num">Rung 3</div><div class="l-name">+ Format</div></div>
+                <div class="ladder-step l-down"><div class="l-num">Rung 4</div><div class="l-name">+ Example ✗</div></div>
+                <div class="ladder-step l-up"><div class="l-num">Rung 5</div><div class="l-name">+ Constraints</div></div>
+            </div>
+
+            <!-- Rung 0 -->
+            <div class="rung">
+                <div class="rung-head">
+                    <h3 contenteditable="true">Rung 0 · The Baseline</h3>
+                    <span class="layer-tag layer-base">No layer — a little embarrassing</span>
+                </div>
+                <div class="block-label">The prompt</div>
+                <div class="prompt-box" contenteditable="true">Write a case study about my payroll project.</div>
+                <div class="block-label">Output — representative excerpt</div>
+                <div class="output-box" contenteditable="true"><strong>"Streamlining Payroll: A Digital Transformation Success Story."</strong> In today's fast-paced business environment… this case study explores how a <span class="bad">cutting-edge</span> payroll management system transformed operations for <span class="bad">a mid-sized company</span>, reducing processing time by <span class="bad">85%</span> and improving employee satisfaction across <span class="bad">200+ staff members</span>. By <span class="bad">leveraging</span> modern web technologies, the solution delivered <span class="bad">seamless</span> integration…</div>
+                <div class="notes-grid">
+                    <div class="note-cell"><h5>What changed in the prompt</h5><p contenteditable="true">Nothing — this is the baseline.</p></div>
+                    <div class="note-cell n-improved"><h5>What the output did</h5><p contenteditable="true"><strong>Invented everything.</strong> A fictional company, a fabricated 85%, "200+ staff" (it's 50+). No paper, no offline, no cement. Reads like every case study on the internet.</p></div>
+                    <div class="note-cell n-failed"><h5>What failed</h5><p contenteditable="true">All of it: no real facts, no reader, no shape, and two words from my banned list ("cutting-edge," "leveraging").</p></div>
+                    <div class="note-cell n-next"><h5>What to try next</h5><p contenteditable="true">It can't know facts I never gave it. Biggest weakness = invention → add <strong>real context</strong> first.</p></div>
+                </div>
+            </div>
+
+            <!-- Rung 1 -->
+            <div class="rung">
+                <div class="rung-head">
+                    <h3 contenteditable="true">Rung 1 · Layer: Real Context</h3>
+                    <span class="layer-tag layer-up">+ verified fact list</span>
+                </div>
+                <div class="block-label">The prompt — change highlighted</div>
+                <div class="prompt-box" contenteditable="true">Write a case study about my payroll project.
+
+<strong>The facts — use only these: DG Cement payroll &amp; attendance system, built solo by me (Sara Arif). Before: 50+ construction workers paid off handwritten paper registers at remote sites; payroll took the site manager most of a day every week; workers disputed totals. What I built: offline-first PWA (sites barely have signal), PHP/MySQL, 28 API endpoints, audit logs; I matched the 26-day payroll formula to the site manager's manual calculation by hand. Result: in production, weekly payroll time down 70%+, zero data loss during outages, I still support it today.</strong></div>
+                <div class="block-label">Output — representative excerpt</div>
+                <div class="output-box" contenteditable="true">DG Cement's construction sites relied on handwritten paper registers for over 50 workers… Sara Arif architected a <span class="bad">comprehensive</span> offline-first Progressive Web Application <span class="bad">leveraging</span> PHP/MySQL with 28 API endpoints. <span class="bad">A Progressive Web App (PWA) is a type of application that combines web and native app features…</span> The implementation delivered a 70%+ reduction in weekly payroll processing time with zero data loss…</div>
+                <div class="notes-grid">
+                    <div class="note-cell"><h5>What changed in the prompt</h5><p contenteditable="true">One layer: <strong>real context</strong> — the verified fact list with "use only these."</p></div>
+                    <div class="note-cell n-improved"><h5>What improved in the output</h5><p contenteditable="true"><strong>The invention stopped.</strong> Every number is now mine — 50+, 28, 70%, the 26-day formula. "Paper registers" and "offline" finally appear. The single biggest jump on the whole ladder.</p></div>
+                    <div class="note-cell n-failed"><h5>What still failed</h5><p contenteditable="true">Written for nobody: it paused to explain what a PWA is mid-story, and the tone is a press release ("comprehensive," "leveraging" — banned again).</p></div>
+                    <div class="note-cell n-next"><h5>What to try next</h5><p contenteditable="true">Explaining basics is an audience problem → add a <strong>defined audience</strong>.</p></div>
+                </div>
+            </div>
+
+            <!-- Rung 2 -->
+            <div class="rung">
+                <div class="rung-head">
+                    <h3 contenteditable="true">Rung 2 · Layer: Defined Audience</h3>
+                    <span class="layer-tag layer-up">+ the one reader</span>
+                </div>
+                <div class="block-label">The prompt — change highlighted</div>
+                <div class="prompt-box" contenteditable="true">[Rung 1 prompt, plus:]
+
+<strong>The reader is one person: an operations manager at an industrial SME in Pakistan. She is drowning in paper registers and spreadsheets. She does not know or care what a PWA, an API, or PHP is — she cares whether it works in the field, what it costs her week, and whether I disappear after delivery.</strong></div>
+                <div class="block-label">Output — representative excerpt</div>
+                <div class="output-box" contenteditable="true">If your sites still run attendance on paper registers, this will sound familiar. At DG Cement, attendance for 50+ workers was written by hand at remote sites, carried back, and retyped — payroll ate most of the site manager's day every week… I built them a system that works where there's no signal: attendance recorded on the spot, synced when a connection appears. Payroll that took a day now takes hours, <strong>and I still look after the system today</strong>…</div>
+                <div class="notes-grid">
+                    <div class="note-cell"><h5>What changed in the prompt</h5><p contenteditable="true">One layer: <strong>defined audience</strong> — the one ops manager, with what she does and doesn't care about.</p></div>
+                    <div class="note-cell n-improved"><h5>What improved in the output</h5><p contenteditable="true"><strong>It stopped explaining basics my reader already skips.</strong> The PWA lecture vanished; "28 endpoints" became "works where there's no signal." It opens with her pain, and addressed the disappearing-freelancer fear unprompted.</p></div>
+                    <div class="note-cell n-failed"><h5>What still failed</h5><p contenteditable="true">Shapeless — one river of paragraphs, ~450 words, trailed off without an ending. A busy manager won't read a wall.</p></div>
+                    <div class="note-cell n-next"><h5>What to try next</h5><p contenteditable="true">A wall of text is a structure problem → specify the <strong>output format</strong>.</p></div>
+                </div>
+            </div>
+
+            <!-- Rung 3 -->
+            <div class="rung">
+                <div class="rung-head">
+                    <h3 contenteditable="true">Rung 3 · Layer: Output Format</h3>
+                    <span class="layer-tag layer-up">+ three beats, word cap</span>
+                </div>
+                <div class="block-label">The prompt — change highlighted</div>
+                <div class="prompt-box" contenteditable="true">[Rung 2 prompt, plus:]
+
+<strong>Format: exactly three beats with these headings — "The problem", "What I did", "What came of it" — then one italic line starting "Next time" naming one thing I'd do differently. 150–180 words total. No introduction, no conclusion, no headline puns.</strong></div>
+                <div class="block-label">Output — representative excerpt</div>
+                <div class="output-box" contenteditable="true"><strong>The problem.</strong> Attendance for 50+ construction workers lived in handwritten registers at remote sites… <strong>What I did.</strong> I built a <span class="bad">seamless</span> system that works with no signal… I matched the 26-day payroll formula by hand — payroll can't be off by a rupee. <strong>What came of it.</strong> A <span class="bad">transformative</span> outcome: payroll time down 70%+, zero records lost… <em>Next time: measure the "before" properly so 70% isn't the only number I can defend.</em></div>
+                <div class="notes-grid">
+                    <div class="note-cell"><h5>What changed in the prompt</h5><p contenteditable="true">One layer: <strong>output format</strong> — three named beats + wrinkle line + hard word count.</p></div>
+                    <div class="note-cell n-improved"><h5>What improved in the output</h5><p contenteditable="true"><strong>Scannable in ten seconds.</strong> The beats forced a story arc; the word cap killed the rambling; the "Next time" line produced an honest wrinkle. Half the length of Rung 2, saying more.</p></div>
+                    <div class="note-cell n-failed"><h5>What still failed</h5><p contenteditable="true">The voice. "Seamless" and "transformative" crept back — generic AI polish smeared over my facts. A good copywriter, not me.</p></div>
+                    <div class="note-cell n-next"><h5>What to try next</h5><p contenteditable="true">Show it what good sounds like → paste an <strong>example</strong> of a case done right.</p></div>
+                </div>
+            </div>
+
+            <!-- Rung 4 — the failure -->
+            <div class="rung rung-worse" id="rung4">
+                <div class="rung-head">
+                    <h3 contenteditable="true">Rung 4 · Layer: Example — this made it WORSE</h3>
+                    <span class="layer-tag layer-down"><i class="fa-solid fa-triangle-exclamation"></i> honest failure</span>
+                </div>
+                <div class="block-label">The prompt — change highlighted</div>
+                <div class="prompt-box" contenteditable="true">[Rung 3 prompt, plus:]
+
+<strong>Here is an example of the quality and voice I want (from my course material — Iris's museum signage case): "The problem. Museum visitors constantly stopped staff to ask where the bathrooms and exit were. The map on the wall was pretty and unhelpful. What I did. I rebuilt the map around the three questions people actually asked, cut the decoration, and tested paper versions for a week before anything was printed…" Match this quality.</strong></div>
+                <div class="block-label">Output — representative excerpt</div>
+                <div class="output-box" contenteditable="true"><strong>The problem.</strong> Site managers were constantly stopped by workers asking about their pay. The paper register on the desk was <span class="bad">tidy and unhelpful</span>. <strong>What I did.</strong> I rebuilt payroll around the <span class="bad">three questions workers actually asked</span>, cut the paperwork, and <span class="bad">tested paper versions for a week</span> before anything went live…</div>
+                <div class="notes-grid">
+                    <div class="note-cell"><h5>What changed in the prompt</h5><p contenteditable="true">One layer: <strong>an example</strong> of a good case (Iris's museum signage, from the course).</p></div>
+                    <div class="note-cell n-improved"><h5>What improved in the output</h5><p contenteditable="true">Honestly? The rhythm, slightly. That's it.</p></div>
+                    <div class="note-cell n-failed"><h5>What went WRONG</h5><p contenteditable="true"><strong>It photocopied the example.</strong> "Pretty and unhelpful" → "tidy and unhelpful." Iris's "three questions" transplanted where it isn't true. "Tested paper versions for a week" — her project, not mine. <strong>Fabrication returned — the failure Rung 1 had fixed — and the case no longer could only describe MY project.</strong></p></div>
+                    <div class="note-cell n-next"><h5>What to try next</h5><p contenteditable="true">Remove the example. Don't give it a voice to imitate — <strong>give it rules and forbid the failure modes</strong> (constraints).</p></div>
+                </div>
+            </div>
+
+            <!-- Rung 5 -->
+            <div class="rung">
+                <div class="rung-head">
+                    <h3 contenteditable="true">Rung 5 · Layer: Constraints (example removed)</h3>
+                    <span class="layer-tag layer-up">+ banned words, cut-rule</span>
+                </div>
+                <div class="block-label">The prompt — change highlighted</div>
+                <div class="prompt-box" contenteditable="true">[Rung 3 prompt — Rung 4's example REMOVED — plus:]
+
+<strong>Constraints: short sentences; numbers over adjectives. Banned words: seamless, transformative, passionate, results-driven, leveraged, spearheaded, cutting-edge, comprehensive. Use only the facts I gave — if a sentence states something not in my fact list, cut the sentence. Keep my phrasings where they exist: "offline-first," "replace paper," "it still runs today."</strong></div>
+                <div class="block-label">Output — representative excerpt</div>
+                <div class="output-box" contenteditable="true"><strong>The problem.</strong> A cement contractor paid 50+ construction workers off paper registers… Payroll took the site manager most of a day, every week. <strong>What I did.</strong> I built an offline-first system for sites with almost no signal… I matched the 26-day payroll formula to the manager's manual calculation by hand — one rupee off starts a dispute. <strong>What came of it.</strong> Payroll time down 70%+. Zero records lost through outages. It still runs today, and I still support it. <em>Next time: log the before-state formally, so 70% isn't the only number I can defend.</em></div>
+                <div class="notes-grid">
+                    <div class="note-cell"><h5>What changed in the prompt</h5><p contenteditable="true">One layer: <strong>constraints</strong> — banned-word list, numbers-over-adjectives, the cut-rule for unsupported sentences, my own phrases kept. (Rung 4's example deleted.)</p></div>
+                    <div class="note-cell n-improved"><h5>What improved in the output</h5><p contenteditable="true"><strong>The generic polish is gone and nothing fabricated came back.</strong> Every banned word absent; short declaratives that sound like me. The cut-rule worked as a fabrication guard. First output I'd ship without editing every line.</p></div>
+                    <div class="note-cell n-failed"><h5>What still failed</h5><p contenteditable="true">Small: it can't know facts I forgot to give (testimonial, launch date). The fact list is now the quality ceiling.</p></div>
+                    <div class="note-cell n-next"><h5>What to try next</h5><p contenteditable="true">A <strong>verification requirement</strong> — "list every fact you needed but didn't have, as questions." That's the doorway to Assignment 1's interview method; it goes in the next experiment, not smuggled in untested.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ Section 2: Final Prompt ═══════ -->
+        <section id="final-section">
+            <h2>2 &nbsp;The Final Reusable Prompt — For a Stranger, Not Just Me</h2>
+            <div class="final-box">
+                <div class="block-label" style="margin-top:0;">Replace the {braces}; nothing else needed. Every layer earned its rung — the example layer is deliberately absent.</div>
+                <div class="prompt-box" contenteditable="true">Write one project as a short case study.
+
+THE FACTS — use only these; if a sentence states something not on this
+list, cut the sentence:
+{your verified facts: what existed before, what you built, the decisions
+you made, real numbers, current status}
+
+THE READER — one person: {who they are, what they're drowning in}. They
+do not know or care about {jargon they'd skip}; they care about {what
+they actually weigh: does it work, what does it cost them, will you
+disappear}.
+
+FORMAT — exactly three beats with these headings: "The problem",
+"What I did", "What came of it". Then one italic line starting
+"Next time" naming one thing you'd do differently. 150–180 words.
+No introduction, no conclusion.
+
+CONSTRAINTS — short sentences; numbers over adjectives. Banned words:
+{your banned list — start with: seamless, transformative, passionate,
+results-driven, leveraged, cutting-edge}. Keep these phrasings of mine
+where they fit: {2–3 phrases that sound like you}.</div>
+                <p class="final-note" contenteditable="true"><strong>Why there is no example slot:</strong> on this ladder, pasting a model case made the output <em>worse</em> — the AI transplanted the example's phrases and even its facts into my project (Rung 4). Rules constrained; the example contaminated.</p>
+            </div>
+        </section>
+
+        <!-- ═══════ Section 3: Self-check ═══════ -->
+        <section id="check-section">
+            <h2>3 &nbsp;Pass / Revise Self-Check</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">Criterion</th>
+                            <th style="width: 50%;">Verification</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td contenteditable="true">Six runs total, each version tied to exactly one named layer</td>
+                            <td contenteditable="true">Baseline + 5 rungs: real context → defined audience → output format → example → constraints. One layer per rung, named in every heading (§1)</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">Notes describe changes in the output, not just the prompt</td>
+                            <td contenteditable="true">"It stopped explaining basics my reader skips" (R2), "half the length saying more" (R3), "'pretty and unhelpful' became 'tidy and unhelpful'" (R4) — all output observations</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">At least one honest "this made it worse" moment</td>
+                            <td contenteditable="true">Rung 4: the example got photocopied, fabricated facts returned ("tested paper versions" — Iris's project, not mine); the layer was removed at Rung 5</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">The final prompt works for a stranger, not just for me</td>
+                            <td contenteditable="true">Fully parameterized with {braces}, self-contained rules, plus a warning about the layer that failed (§2)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Week 2 &bull; Assignment 2 — The Prompt Ladder &bull; Generated for FlyRank Track Evaluation</p>
+        </footer>
+
+        <!-- Print Footer (only visible on printed PDF) -->
+        <div class="print-footer">
+            <span>Prepared for FlyRank Evaluation Track</span>
+            <span id="print-date"></span>
+        </div>
+    </div>
+
+    <!-- Scripting -->
+    <script>
+        const themeBtn = document.getElementById('theme-btn');
+        const printBtn = document.getElementById('print-btn');
+
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            themeBtn.innerHTML = isLight
+                ? '<i class="fa-solid fa-moon"></i> Toggle Dark Theme'
+                : '<i class="fa-solid fa-sun"></i> Toggle Light Theme (for Print)';
+        });
+
+        printBtn.addEventListener('click', () => {
+            const wasLight = document.body.classList.contains('light-theme');
+            if (!wasLight) document.body.classList.add('light-theme');
+            window.print();
+            if (!wasLight) document.body.classList.remove('light-theme');
+        });
+
+        document.getElementById('print-date').textContent = "Generated on " + new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+    </script>
+</body>
+</html>
