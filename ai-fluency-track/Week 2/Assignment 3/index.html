@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FL-02 v2 — Prompting Fundamentals on Real Tasks | Sara Arif</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ============ FL-02v2 screen additions ============ */
+
+        .eval-banner {
+            background: linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(217,119,6,0.08) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow);
+        }
+        .eval-banner h2 { border: none; padding-left: 0; margin-bottom: 1rem; font-size: 1.3rem; }
+        .eval-banner h2 i { color: var(--accent); margin-right: 0.5rem; }
+        .deliverable-map { width: 100%; border-collapse: collapse; }
+        .deliverable-map th, .deliverable-map td { padding: 0.6rem 0.8rem; font-size: 0.88rem; border-bottom: 1px solid var(--border-color); text-align: left; }
+        .deliverable-map th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+        .deliverable-map a { color: var(--primary-light); text-decoration: none; font-weight: 600; }
+        .deliverable-map a:hover { text-decoration: underline; }
+        .status-pill {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.2rem 0.65rem; border-radius: 20px;
+            font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        .status-done { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.35); }
+        .status-embed { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.35); }
+
+        /* task banner */
+        .task-banner {
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--accent);
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.03);
+            padding: 1.3rem 1.7rem;
+            margin-bottom: 1.5rem;
+        }
+        .task-banner h3 { font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: 0.5rem; }
+        .task-banner p { font-size: 0.9rem; line-height: 1.7; color: var(--text-muted); }
+        .task-banner p strong { color: var(--text-main); }
+        .criteria-chips { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.8rem; }
+        .criteria-chip {
+            font-size: 0.75rem; font-weight: 600;
+            padding: 0.3rem 0.7rem; border-radius: 6px;
+            border: 1px solid rgba(217,119,6,0.4); color: var(--accent);
+            background: rgba(217,119,6,0.06);
+        }
+
+        /* iteration cards */
+        .iter {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.02);
+            padding: 1.4rem 1.7rem;
+            margin-bottom: 1.5rem;
+        }
+        .iter-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .iter-head h3 { font-family: var(--font-heading); font-size: 1.12rem; }
+        .tech-tag {
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+            padding: 0.2rem 0.6rem; border-radius: 20px; white-space: nowrap;
+            background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.4);
+        }
+        .tech-tag.t-naive { background: rgba(148,163,184,0.15); color: #94a3b8; border-color: rgba(148,163,184,0.4); }
+        .block-label {
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--text-muted); margin: 0.9rem 0 0.4rem 0;
+        }
+        .prompt-box {
+            background: rgba(0,0,0,0.25);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.9rem 1.1rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.8rem; line-height: 1.6;
+            color: var(--text-muted);
+            white-space: pre-wrap;
+        }
+        body.light-theme .prompt-box { background: #f8fafc; }
+        .prompt-box strong { color: var(--text-main); background: rgba(217,119,6,0.15); padding: 0.05em 0.2em; border-radius: 3px; font-weight: 600; }
+        body.light-theme .prompt-box strong { background: #fde9cf; }
+        .output-box {
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--primary-light);
+            border-radius: 0 8px 8px 0;
+            background: rgba(59,130,246,0.04);
+            padding: 0.9rem 1.1rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.78rem; line-height: 1.6;
+            color: var(--text-muted);
+            white-space: pre-wrap;
+        }
+        .output-box .bad { color: #ef4444; font-weight: 600; }
+        .output-box .good { color: #10b981; font-weight: 600; }
+        .iter-note {
+            margin-top: 0.9rem; padding: 0.8rem 1.1rem;
+            border: 1px dashed var(--accent); border-radius: var(--radius);
+            background: rgba(217,119,6,0.04);
+            font-size: 0.87rem; line-height: 1.7; color: var(--text-muted);
+        }
+        .iter-note strong { color: var(--text-main); }
+        .iter-note .n-label { color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.07em; display: block; margin-bottom: 0.3rem; }
+
+        /* cross-model table */
+        .xm-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+        .xm-table th, .xm-table td { padding: 0.7rem 0.9rem; font-size: 0.85rem; line-height: 1.6; border-bottom: 1px solid var(--border-color); text-align: left; vertical-align: top; }
+        .xm-table th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+        .xm-table td:first-child { font-weight: 700; color: var(--text-main); white-space: nowrap; }
+        .xm-verdict {
+            margin-top: 1.1rem; padding: 1rem 1.3rem;
+            border: 1px solid rgba(16,185,129,0.4); border-radius: var(--radius);
+            background: rgba(16,185,129,0.05);
+            font-size: 0.9rem; line-height: 1.7;
+        }
+        .xm-verdict strong { color: #10b981; }
+
+        /* final template */
+        .final-box {
+            border: 1px solid rgba(16,185,129,0.5);
+            border-radius: var(--radius);
+            background: rgba(16,185,129,0.04);
+            padding: 1.3rem 1.6rem;
+        }
+        .final-box .prompt-box { border-color: rgba(16,185,129,0.35); }
+        .final-note { margin-top: 0.9rem; font-size: 0.87rem; color: var(--text-muted); line-height: 1.7; }
+        .final-note strong { color: var(--text-main); }
+
+        /* ═══════ PRINT — same architecture as FL-04/05 ═══════ */
+        @media print {
+            @page { size: A4; margin: 1.5cm 1.4cm 1.7cm 1.4cm; }
+
+            html, body {
+                background: #ffffff !important;
+                color: #1e293b !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                font-size: 9.5pt !important;
+                line-height: 1.5 !important;
+            }
+
+            .bg-glow, .bg-glow-2, .controls-bar, footer { display: none !important; }
+            .container { max-width: 100% !important; margin: 0 !important; }
+
+            /* undo the base stylesheet's fixed 4-column table layout (built for FL-01) */
+            table { table-layout: auto !important; }
+            th:nth-child(1), td:nth-child(1),
+            th:nth-child(2), td:nth-child(2),
+            th:nth-child(3), td:nth-child(3),
+            th:nth-child(4), td:nth-child(4) { width: auto !important; }
+
+            section {
+                background: none !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 0 1.4rem 0 !important;
+                page-break-inside: auto !important;
+                break-inside: auto !important;
+                backdrop-filter: none !important;
+            }
+
+            .print-header {
+                display: flex !important;
+                justify-content: space-between;
+                border-bottom: 2px solid #1e3a8a;
+                padding-bottom: 5pt;
+                margin-bottom: 14pt;
+                font-size: 7.5pt;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                color: #475569;
+            }
+            .print-footer {
+                display: flex !important;
+                justify-content: space-between;
+                border-top: 1px solid #cbd5e1;
+                padding-top: 5pt;
+                margin-top: 18pt;
+                font-size: 7.5pt;
+                color: #64748b;
+            }
+
+            header { margin-bottom: 12pt !important; padding-bottom: 10pt !important; border-bottom: 1px solid #e2e8f0 !important; text-align: left !important; }
+            h1 {
+                font-size: 19pt !important;
+                background: none !important;
+                -webkit-text-fill-color: initial !important;
+                color: #0f172a !important;
+                margin-bottom: 2pt !important;
+                letter-spacing: -0.02em !important;
+            }
+            .subtitle { color: #b45309 !important; font-size: 9pt !important; letter-spacing: 0.18em !important; }
+            .meta-info { justify-content: flex-start !important; gap: 14pt !important; margin-top: 4pt !important; font-size: 8.5pt !important; color: #475569 !important; }
+            .meta-info strong { color: #0f172a !important; }
+            .profile-avatar { border-color: #b45309 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+            h2 {
+                font-size: 12.5pt !important;
+                color: #0f172a !important;
+                border-left: none !important;
+                border-bottom: 1.5px solid #1e3a8a !important;
+                padding: 0 0 4pt 0 !important;
+                margin-bottom: 10pt !important;
+                page-break-after: avoid !important;
+            }
+
+            /* page plan */
+            #iterations-section { page-break-before: always !important; break-before: page !important; }
+            #xmodel-section     { page-break-before: always !important; break-before: page !important; }
+            #final-section      { page-break-before: always !important; break-before: page !important; }
+            #check-section      { page-break-before: avoid !important; margin-top: 14pt !important; }
+
+            .eval-banner {
+                background: #ffffff !important;
+                border: 1.5px solid #1e3a8a !important;
+                border-radius: 6px !important;
+                padding: 12pt 14pt !important;
+                margin-bottom: 0 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid !important;
+            }
+            .eval-banner h2 { border-bottom: 1px solid #e2e8f0 !important; font-size: 11.5pt !important; }
+            .deliverable-map th, .deliverable-map td {
+                font-size: 8pt !important;
+                padding: 5pt 6pt !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+                vertical-align: top !important;
+            }
+            .deliverable-map th { color: #1e3a8a !important; font-size: 7pt !important; }
+            .deliverable-map th:nth-child(1), .deliverable-map td:nth-child(1) { width: 42% !important; }
+            .deliverable-map th:nth-child(2), .deliverable-map td:nth-child(2) { width: 34% !important; }
+            .deliverable-map th:nth-child(3), .deliverable-map td:nth-child(3) { width: 24% !important; }
+            .deliverable-map a { color: #1e3a8a !important; text-decoration: none !important; }
+            .status-pill {
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+                font-size: 6.5pt !important; padding: 1.5pt 5pt !important;
+            }
+            .status-done  { background: #ecfdf5 !important; color: #047857 !important; border: 0.75pt solid #047857 !important; }
+            .status-embed { background: #eff6ff !important; color: #1d4ed8 !important; border: 0.75pt solid #1d4ed8 !important; }
+
+            .task-banner {
+                background: #ffffff !important;
+                border: 1pt solid #94a3b8 !important;
+                border-left: 4pt solid #b45309 !important;
+                padding: 10pt 12pt !important;
+                page-break-inside: avoid !important;
+            }
+            .task-banner h3 { font-size: 10.5pt !important; color: #0f172a !important; }
+            .task-banner p { font-size: 8.5pt !important; color: #475569 !important; }
+            .task-banner p strong { color: #0f172a !important; }
+            .criteria-chip {
+                font-size: 7pt !important; padding: 2pt 6pt !important;
+                border: 0.75pt solid #b45309 !important; color: #b45309 !important;
+                background: #fffbf5 !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+
+            .iter {
+                background: #ffffff !important;
+                border: 1pt solid #cbd5e1 !important;
+                padding: 9pt 12pt !important;
+                margin-bottom: 9pt !important;
+                page-break-inside: avoid !important;
+            }
+            .iter-head { margin-bottom: 6pt !important; }
+            .iter-head h3 { font-size: 10.5pt !important; color: #0f172a !important; }
+            .tech-tag {
+                font-size: 6pt !important; padding: 1.5pt 5pt !important;
+                background: #ecfdf5 !important; color: #047857 !important; border: 0.75pt solid #047857 !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .tech-tag.t-naive { background: #f1f5f9 !important; color: #475569 !important; border-color: #94a3b8 !important; }
+            .block-label { font-size: 6.5pt !important; color: #1e3a8a !important; margin: 6pt 0 3pt 0 !important; page-break-after: avoid !important; }
+            .prompt-box {
+                background: #f8fafc !important;
+                border: 0.75pt solid #cbd5e1 !important;
+                padding: 6pt 8pt !important;
+                font-size: 7pt !important;
+                color: #334155 !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .prompt-box strong { background: #fde9cf !important; color: #0f172a !important; }
+            .output-box {
+                background: #f8fafc !important;
+                border: 0.75pt solid #cbd5e1 !important;
+                border-left: 2.5pt solid #1e3a8a !important;
+                padding: 6pt 8pt !important;
+                font-size: 7pt !important;
+                color: #475569 !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .output-box .bad { color: #dc2626 !important; }
+            .output-box .good { color: #047857 !important; }
+            .iter-note {
+                background: #fffbf5 !important;
+                border: 0.75pt dashed #b45309 !important;
+                padding: 6pt 9pt !important;
+                margin-top: 6pt !important;
+                font-size: 7.8pt !important;
+                color: #475569 !important;
+                page-break-inside: avoid !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .iter-note strong { color: #0f172a !important; }
+            .iter-note .n-label { color: #b45309 !important; font-size: 6pt !important; }
+
+            .xm-table th, .xm-table td {
+                font-size: 7.8pt !important;
+                padding: 5pt 6pt !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+            }
+            .xm-table th { color: #1e3a8a !important; font-size: 6.5pt !important; }
+            .xm-table td:first-child { color: #0f172a !important; }
+            .xm-table th:nth-child(1), .xm-table td:nth-child(1) { width: 14% !important; white-space: normal !important; }
+            .xm-table th:nth-child(2), .xm-table td:nth-child(2) { width: 43% !important; }
+            .xm-table th:nth-child(3), .xm-table td:nth-child(3) { width: 43% !important; }
+            .xm-verdict {
+                background: #ecfdf5 !important;
+                border: 1pt solid #047857 !important;
+                padding: 8pt 11pt !important;
+                font-size: 8.2pt !important;
+                color: #1e293b !important;
+                page-break-inside: avoid !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .xm-verdict strong { color: #047857 !important; }
+
+            .final-box {
+                background: #ecfdf5 !important;
+                border: 1pt solid #047857 !important;
+                padding: 9pt 12pt !important;
+                page-break-inside: avoid !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .final-note { font-size: 7.8pt !important; color: #475569 !important; }
+            .final-note strong { color: #0f172a !important; }
+
+            #check-section table { width: 100% !important; }
+            #check-section th, #check-section td {
+                font-size: 8.5pt !important;
+                padding: 6pt 8pt !important;
+                border-bottom: 0.75pt solid #cbd5e1 !important;
+                vertical-align: top !important;
+            }
+            #check-section th { color: #1e3a8a !important; }
+            #check-section th:nth-child(1), #check-section td:nth-child(1) { width: 50% !important; }
+            #check-section th:nth-child(2), #check-section td:nth-child(2) { width: 50% !important; }
+            #check-section tbody tr td:first-child { font-weight: 600 !important; color: #0f172a !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="container">
+        <div class="print-header">
+            <span>Sara Arif &bull; Prompting Fundamentals on Real Tasks</span>
+            <span>Document Code: FL-02 v2 &bull; Week 2 &bull; Phase: Foundations</span>
+        </div>
+
+        <header>
+            <span class="subtitle">Week 2 &bull; Assignment 3 &bull; Code FL-02 v2</span>
+            <h1 contenteditable="true" spellcheck="false">Prompting Fundamentals on Real Tasks</h1>
+            <div class="meta-info">
+                <div class="meta-item">Track: <strong>General AI Fluency</strong></div>
+                <div class="meta-item">Week: <strong>2</strong> &bull; Phase: <strong>Foundations</strong></div>
+                <div class="meta-item student-profile">
+                    <img src="sara arif.png" alt="Sara Arif" class="profile-avatar">
+                    <span>Student: <strong contenteditable="true" id="student-name">Sara Arif</strong></span>
+                </div>
+            </div>
+        </header>
+
+        <div class="controls-bar">
+            <div class="control-label">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Double-click text to edit &bull; then Print / Save as PDF.</span>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="theme-btn">
+                    <i class="fa-solid fa-sun"></i> Toggle Light Theme (for Print)
+                </button>
+                <button class="btn btn-primary" id="print-btn">
+                    <i class="fa-solid fa-print"></i> Print / Save as PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- ═══════ EVALUATOR SUMMARY ═══════ -->
+        <div class="eval-banner" id="evaluator-summary">
+            <h2><i class="fa-solid fa-clipboard-check"></i>Evaluator Summary — Deliverables &amp; Where to Find Them</h2>
+            <table class="deliverable-map">
+                <thead>
+                    <tr>
+                        <th style="width:42%;">Required deliverable (per brief)</th>
+                        <th style="width:34%;">Location in this document</th>
+                        <th style="width:24%;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Work on a real task from my FL-01 audit</td>
+                        <td><a href="#task-section">§1 The Task</a> — FL-01 Target Task 1 (SQL migrations, DG Cement), with its 3 criteria</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> Verbatim</span></td>
+                    </tr>
+                    <tr>
+                        <td>Naive prompt + 5 iterations, each tied to a named technique</td>
+                        <td><a href="#iterations-section">§2 The Iteration Log</a> — role → context &amp; motivation → few-shot → structure → decomposition</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> 6 runs</span></td>
+                    </tr>
+                    <tr>
+                        <td>A note per iteration on the observed output difference</td>
+                        <td>Note box under every version in §2</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> Complete</span></td>
+                    </tr>
+                    <tr>
+                        <td>Cross-model comparison (Claude vs ChatGPT), specific</td>
+                        <td><a href="#xmodel-section">§3</a> — tone, structure, accuracy, failure points + what ChatGPT did better</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> 4 dimensions</span></td>
+                    </tr>
+                    <tr>
+                        <td>Final reusable template, no personal context</td>
+                        <td><a href="#final-section">§4 The Template</a> — fully {brace}-parameterized</td>
+                        <td><span class="status-pill status-done"><i class="fa-solid fa-check"></i> Complete</span></td>
+                    </tr>
+                    <tr>
+                        <td>Anthropic tutorial basics chapters worked through</td>
+                        <td>Techniques applied are the tutorial's core five; drills done in my Claude workspace</td>
+                        <td><span class="status-pill status-embed"><i class="fa-solid fa-book"></i> Applied here</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ═══════ Section 1: The Task ═══════ -->
+        <section id="task-section">
+            <h2>1 &nbsp;The Real Task — From My FL-01 Audit</h2>
+            <div class="task-banner">
+                <h3 contenteditable="true"><i class="fa-solid fa-database" style="color:var(--accent); margin-right:0.5rem;"></i>FL-01 Target Task 1 · Automating SQL migration scripts for the DG Cement Work Tracker</h3>
+                <p contenteditable="true">Classified <strong>"Collaborate with AI"</strong> in my Week 1 audit: I define the target schema requirements, AI suggests correct syntax and constraints for MySQL. The concrete job here: add <strong>audit-log capability</strong> to the live database that pays 50+ workers — where an untraceable change to attendance or payroll can become a labour dispute. FL-01 already defined what success means:</p>
+                <div class="criteria-chips">
+                    <span class="criteria-chip">(a) runs without syntax errors</span>
+                    <span class="criteria-chip">(b) all existing production rows preserved</span>
+                    <span class="criteria-chip">(c) &lt; 500 ms on a 10,000-row database</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ Section 2: Iteration Log ═══════ -->
+        <section id="iterations-section">
+            <h2>2 &nbsp;The Iteration Log — Six Versions, One Technique Each</h2>
+
+            <!-- V0 -->
+            <div class="iter">
+                <div class="iter-head">
+                    <h3 contenteditable="true">V0 · The Naive Prompt</h3>
+                    <span class="tech-tag t-naive">what I'd have typed a month ago</span>
+                </div>
+                <div class="block-label">Prompt</div>
+                <div class="prompt-box" contenteditable="true">Write a SQL migration to add an audit log table to my database.</div>
+                <div class="block-label">Output — representative excerpt</div>
+                <div class="output-box" contenteditable="true">CREATE TABLE audit_log (
+    id <span class="bad">SERIAL</span> PRIMARY KEY,            -- PostgreSQL, not MySQL
+    table_name VARCHAR(255),
+    action VARCHAR(50),
+    user_id INTEGER,
+    timestamp TIMESTAMP DEFAULT <span class="bad">NOW()</span>
+);
+<span class="bad">"…you may want to adjust the columns based on your needs…"</span></div>
+                <div class="iter-note" contenteditable="true"><span class="n-label">Note — what the output did</span><strong>Wrong database.</strong> SERIAL and NOW() are PostgreSQL — my system is MySQL. Generic columns tied to nothing in my schema, no rollback, and "adjust based on your needs" hands the work back to me. Scores 0 of 3 against my FL-01 criteria — it wouldn't even parse. <strong>Next:</strong> it doesn't know what kind of engineer should be answering → role assignment.</div>
+            </div>
+
+            <!-- V1 -->
+            <div class="iter">
+                <div class="iter-head">
+                    <h3 contenteditable="true">V1 · Technique: Role Assignment</h3>
+                    <span class="tech-tag">+ senior MySQL 8 DBA persona</span>
+                </div>
+                <div class="block-label">Prompt — change highlighted</div>
+                <div class="prompt-box" contenteditable="true"><strong>You are a senior MySQL 8 DBA who writes migrations for live production systems and treats data loss as a career-ending event.</strong>
+
+Write a SQL migration to add an audit log table to my database.</div>
+                <div class="block-label">Output — representative excerpt</div>
+                <div class="output-box" contenteditable="true"><span class="good">-- Run inside a transaction where possible; take a backup first.</span>
+CREATE TABLE audit_log (
+    id BIGINT UNSIGNED NOT NULL <span class="good">AUTO_INCREMENT</span> PRIMARY KEY,
+    table_name VARCHAR(64) NOT NULL,
+    action <span class="good">ENUM('INSERT','UPDATE','DELETE')</span> NOT NULL,
+    changed_by VARCHAR(64) NOT NULL,
+    changed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) <span class="good">ENGINE=InnoDB DEFAULT CHARSET=utf8mb4</span>;</div>
+                <div class="iter-note" contenteditable="true"><span class="n-label">Note — what improved in the output</span><strong>The dialect fixed itself without me listing a single syntax rule</strong> — AUTO_INCREMENT, InnoDB, utf8mb4, an ENUM, plus an unprompted "take a backup first." The role carried a whole set of conventions I never spelled out. <strong>Still failed:</strong> it's auditing a database it has never seen — no link to my tables, no old/new-value capture, which is the whole point for dispute resolution. <strong>Next:</strong> context &amp; motivation.</div>
+            </div>
+
+            <!-- V2 -->
+            <div class="iter">
+                <div class="iter-head">
+                    <h3 contenteditable="true">V2 · Technique: Context &amp; Motivation</h3>
+                    <span class="tech-tag">+ live schema, the why, hard constraints</span>
+                </div>
+                <div class="block-label">Prompt — change highlighted</div>
+                <div class="prompt-box" contenteditable="true">[V1 prompt, plus:]
+
+<strong>Context — the live schema (excerpts):
+  workers(id PK, name, cnic, site_id, daily_rate, created_at)
+  attendance(id PK, worker_id FK→workers.id, work_date, status, hours, marked_by)
+  payroll_periods(id PK, period_start, period_end, locked)
+Production database paying 50+ construction workers; ~10,000 rows in attendance.
+Why this matters: wages are calculated from attendance on a 26-day cycle — if a
+record changes and nobody can prove who changed it and what it was before, that's
+a labour dispute. Every change to attendance and payroll_periods must be traceable:
+who, when, old value, new value. Constraints: all existing rows preserved; runs in
+under 500 ms on 10k rows.</strong></div>
+                <div class="block-label">Output — representative excerpt</div>
+                <div class="output-box" contenteditable="true">CREATE TABLE audit_log (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    table_name <span class="good">ENUM('attendance','payroll_periods')</span> NOT NULL,
+    record_id BIGINT UNSIGNED NOT NULL,
+    action ENUM('INSERT','UPDATE','DELETE') NOT NULL,
+    <span class="good">old_values JSON NULL,
+    new_values JSON NULL,</span>
+    changed_by VARCHAR(64) NOT NULL,
+    changed_at TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    <span class="good">INDEX idx_audit_record (table_name, record_id)</span>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</div>
+                <div class="iter-note" contenteditable="true"><span class="n-label">Note — what improved in the output</span>It designed for <strong>my</strong> problem: the ENUM locks auditing to exactly the two dispute-sensitive tables, and <strong>old_values/new_values JSON appeared because I explained the labour-dispute motivation — I never asked for those columns; the <em>why</em> produced them.</strong> The index anticipates "show me this record's history." <strong>Still failed:</strong> a SQL blob in chatty prose — no rollback, no house file format, nothing I can drop into <code>migrations/</code>. <strong>Next:</strong> few-shot examples.</div>
+            </div>
+
+            <!-- V3 -->
+            <div class="iter">
+                <div class="iter-head">
+                    <h3 contenteditable="true">V3 · Technique: Few-Shot Examples</h3>
+                    <span class="tech-tag">+ one real migration file as format example</span>
+                </div>
+                <div class="block-label">Prompt — change highlighted</div>
+                <div class="prompt-box" contenteditable="true">[V2 prompt, plus:]
+
+<strong>Match the house format of my existing migrations. Example (a real file from
+the project):
+
+&lt;example&gt;
+-- Migration: 014_add_site_id_to_workers
+-- Author: Sara Arif | Date: 2026-03-02
+-- Purpose: workers move between sites; payroll must know where hours accrued
+
+-- ==== UP ====
+ALTER TABLE workers ADD COLUMN site_id INT UNSIGNED NULL AFTER cnic;
+
+-- ==== DOWN ====
+ALTER TABLE workers DROP COLUMN site_id;
+&lt;/example&gt;</strong></div>
+                <div class="block-label">Output — representative excerpt</div>
+                <div class="output-box" contenteditable="true"><span class="good">-- Migration: 015_add_audit_log</span>
+-- Author: Sara Arif | Date: 2026-07-15
+-- Purpose: attendance/payroll changes must be traceable (who, when,
+--          old→new) to prevent labour disputes
+
+-- ==== UP ====
+CREATE TABLE audit_log ( … as V2 … );
+
+<span class="good">-- ==== DOWN ====
+DROP TABLE IF EXISTS audit_log;</span></div>
+                <div class="iter-note" contenteditable="true"><span class="n-label">Note — what improved in the output</span>House style adopted exactly — the filename continues my sequence (015 after 014), the header matches field-for-field, and <strong>the UP/DOWN split gave me a rollback for free</strong> because the example demonstrated one. <strong>Worth recording:</strong> in my FL-05 ladder an example made prose output <em>worse</em> (it photocopied the example's facts). Here the same technique was the cleanest win. The difference: this example carries <strong>format</strong>; the facts still come from V2's schema — nothing in a migration header to contaminate. <strong>Examples steer structure safely; they steer content dangerously.</strong> <strong>Next:</strong> nothing verifies my FL-01 criteria → output structure.</div>
+            </div>
+
+            <!-- V4 -->
+            <div class="iter">
+                <div class="iter-head">
+                    <h3 contenteditable="true">V4 · Technique: Output Structure</h3>
+                    <span class="tech-tag">+ four XML-tagged sections</span>
+                </div>
+                <div class="block-label">Prompt — change highlighted</div>
+                <div class="prompt-box" contenteditable="true">[V3 prompt, plus:]
+
+<strong>Structure the response in exactly four sections, using these XML tags:
+&lt;migration&gt; the UP/DOWN file, house format &lt;/migration&gt;
+&lt;verification&gt; SQL I run before and after: row counts on every existing
+  table, and how to time the migration &lt;/verification&gt;
+&lt;risks&gt; what could go wrong on a live 10k-row database, each with its
+  mitigation &lt;/risks&gt;
+&lt;assumptions&gt; anything you assumed that I should confirm &lt;/assumptions&gt;
+No text outside these tags.</strong></div>
+                <div class="block-label">Output — representative excerpt</div>
+                <div class="output-box" contenteditable="true">&lt;verification&gt;
+<span class="good">-- BEFORE and AFTER — must match exactly:
+SELECT COUNT(*) FROM workers;
+SELECT COUNT(*) FROM attendance;
+SELECT COUNT(*) FROM payroll_periods;</span>
+-- Timing: SET profiling = 1; … SHOW PROFILES;
+&lt;/verification&gt;
+&lt;assumptions&gt;
+<span class="good">- changed_by comes from the PHP session user, passed by application code.
+- Trigger-based capture is a separate, later migration.</span>
+&lt;/assumptions&gt;</div>
+                <div class="iter-note" contenteditable="true"><span class="n-label">Note — what improved in the output</span>The deliverable became <strong>complete and checkable</strong> — the verification queries directly test criterion (b), the timing method addresses (c), and the assumptions section surfaced two decisions I hadn't made consciously (where changed_by comes from; triggers deferred). The prose disappeared because the tags left it nowhere to live. <strong>Still failed:</strong> reasoning is shallow — generic risks, straight to SQL. It documented risks; it didn't let them <em>shape</em> the migration. <strong>Next:</strong> step decomposition.</div>
+            </div>
+
+            <!-- V5 -->
+            <div class="iter">
+                <div class="iter-head">
+                    <h3 contenteditable="true">V5 · Technique: Step Decomposition</h3>
+                    <span class="tech-tag">+ think-before-SQL, self-check last</span>
+                </div>
+                <div class="block-label">Prompt — change highlighted</div>
+                <div class="prompt-box" contenteditable="true">[V4 prompt, plus:]
+
+<strong>Work through these steps in order, showing each:
+1. Restate the schema delta you are about to make.
+2. List everything that could break on a LIVE 10k-row MySQL 8 database
+   (locks, FK violations on existing rows, defaults, replication) —
+   before writing any SQL.
+3. Only then write the migration, mitigating each risk from step 2.
+4. Write the rollback.
+5. Write the verification.
+6. Self-check: state pass/fail against my three criteria — and say what
+   you cannot verify from here.</strong></div>
+                <div class="block-label">Output — representative excerpt</div>
+                <div class="output-box" contenteditable="true">Step 2 — what could break:
+- CREATE TABLE acquires only a brief metadata lock: safe.
+- <span class="good">BUT any future ALTER adding an FK column to attendance (10k rows) must be
+  NULLable or backfilled. This migration deliberately avoids touching existing
+  tables at all: audit_log references records logically (table_name +
+  record_id), not by FK — so criterion (b) cannot be violated by design.</span>
+…
+Step 6 — self-check:
+  (a) syntax: valid MySQL 8, verifiable by dry-run on a copy.   PASS
+  (b) rows preserved: no existing table is touched.             PASS by design
+  (c) &lt;500 ms: expected ~10–50 ms — <span class="good">but I cannot measure your hardware
+      from here. Run the timing in &lt;verification&gt; to confirm.</span>  MEASURE</div>
+                <div class="iter-note" contenteditable="true"><span class="n-label">Note — what improved in the output</span><strong>The design itself improved, not just the wrapping.</strong> Step 2 caught the FK-on-live-rows trap and <em>redesigned around it</em> — logical references instead of foreign keys, so no existing table gets altered and criterion (b) becomes unbreakable by construction. In V4 that risk didn't even appear. And the self-check refused to overclaim: "I cannot measure your hardware from here" is exactly the honesty my criteria need. <strong>Remaining limit:</strong> the model reasons about 500 ms; only my machine proves it — which is why FL-01 classified this task "Collaborate with AI," not "Fully Automate."</div>
+            </div>
+        </section>
+
+        <!-- ═══════ Section 3: Cross-model ═══════ -->
+        <section id="xmodel-section">
+            <h2>3 &nbsp;Cross-Model — Final V5 Prompt on Claude vs ChatGPT</h2>
+            <table class="xm-table">
+                <thead>
+                    <tr><th>Dimension</th><th>Claude</th><th>ChatGPT</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Tone</td>
+                        <td contenteditable="true">Terse, spec-like; each step a labeled block, no filler between sections.</td>
+                        <td contenteditable="true">Friendlier, chattier — "Great, let's make this production-safe!" and prose transitions between the tagged sections, despite "no text outside these tags."</td>
+                    </tr>
+                    <tr>
+                        <td>Structure</td>
+                        <td contenteditable="true">Followed the 6 steps and 4 XML tags exactly; self-check rendered as a criterion-by-criterion table.</td>
+                        <td contenteditable="true">Merged steps 1–2 into one narrative block; half the verification landed inside &lt;risks&gt;. Mostly there, but needed re-sorting before filing.</td>
+                    </tr>
+                    <tr>
+                        <td>Accuracy</td>
+                        <td contenteditable="true">Stuck to scope: exactly the table specified, logical-reference design, correct MySQL 8 throughout.</td>
+                        <td contenteditable="true">Also correct MySQL 8 — but added an unrequested index on changed_at and an extra session_id column "for good measure." Useful ideas; scope creep on a payroll database is how surprises happen.</td>
+                    </tr>
+                    <tr>
+                        <td>Failure points</td>
+                        <td contenteditable="true">Hedged honestly on the 500 ms criterion: "expected 10–50 ms; measure on your hardware."</td>
+                        <td contenteditable="true"><strong>Overclaimed:</strong> "this will comfortably run in under 500 ms ✅" stated as fact — it cannot know that. On a criterion that exists because payroll can't be wrong, unearned certainty is the worse failure.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="xm-verdict" contenteditable="true">
+                <strong>One thing ChatGPT did better:</strong> it volunteered a trigger-based capture design (AFTER UPDATE triggers on attendance writing to audit_log automatically) as a follow-up — a genuinely good architectural suggestion Claude never raised because it stayed strictly inside the spec. Off-spec here, but it went into my backlog as migration 016. <strong>Verdict:</strong> Claude's output went into the project as-is; ChatGPT's needed ten minutes of re-sorting and de-scoping. For production SQL, the literal instruction-follower wins; for "what should I build next," ChatGPT's tangent was the most valuable paragraph either model produced.
+            </div>
+        </section>
+
+        <!-- ═══════ Section 4: Final template ═══════ -->
+        <section id="final-section">
+            <h2>4 &nbsp;The Final Reusable Template — No Personal Context Left</h2>
+            <div class="final-box">
+                <div class="block-label" style="margin-top:0;">For any schema-change task on a live database. Replace the {braces}; nothing else needed.</div>
+                <div class="prompt-box" contenteditable="true">You are a senior {DIALECT + VERSION} DBA who writes migrations for live
+production systems and treats data loss as a career-ending event.
+
+CONTEXT — the live schema (excerpts):
+{paste the CREATE TABLE lines or column lists for every table involved}
+This is a production database: {scale — rows, users}. Why this matters:
+{the business consequence of getting it wrong — one sentence}.
+Constraints: {your hard criteria, e.g. all rows preserved; runs under N ms}.
+
+HOUSE FORMAT — match this example from my project:
+&lt;example&gt;
+{paste ONE real migration file — header comment, UP/DOWN sections,
+naming convention}
+&lt;/example&gt;
+
+STRUCTURE — respond in exactly these sections, no text outside them:
+&lt;migration&gt; the UP/DOWN file, house format &lt;/migration&gt;
+&lt;verification&gt; SQL to run before and after: row counts on every
+existing table, plus how to time the migration &lt;/verification&gt;
+&lt;risks&gt; what could go wrong live, each with its mitigation &lt;/risks&gt;
+&lt;assumptions&gt; anything you assumed that I should confirm &lt;/assumptions&gt;
+
+PROCESS — work through these steps in order, showing each:
+1. Restate the schema delta.
+2. List everything that could break on the live database (locks, FK
+   violations on existing rows, defaults, replication) — BEFORE any SQL.
+3. Write the migration, mitigating each risk from step 2.
+4. Write the rollback.
+5. Write the verification.
+6. Self-check against my constraints — and say explicitly what you
+   cannot verify from where you sit.</div>
+                <p class="final-note" contenteditable="true"><strong>Usage notes for a stranger:</strong> the example must be a <strong>format</strong> example (file layout), never a content example — format examples anchor structure; content examples leak their facts into your output (proven in my FL-05 ladder). Keep step 6's "say what you cannot verify" — it converts model overconfidence into a to-do list for you. And run &lt;verification&gt; yourself: the model reasons about your constraints; only your hardware proves them.</p>
+            </div>
+        </section>
+
+        <!-- ═══════ Section 5: Self-check ═══════ -->
+        <section id="check-section">
+            <h2>5 &nbsp;Pass / Revise Self-Check</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">Criterion</th>
+                            <th style="width: 50%;">Verification</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td contenteditable="true">Five+ iterations beyond naive, each tied to a named technique</td>
+                            <td contenteditable="true">V1 role assignment · V2 context &amp; motivation · V3 few-shot examples · V4 output structure · V5 step decomposition — named in every heading (§2)</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">Each note explains the observed output difference, not just the prompt change</td>
+                            <td contenteditable="true">"The dialect fixed itself without me listing a syntax rule" (V1), "old/new-value columns appeared because I explained the dispute motivation" (V2), "redesigned around the FK trap — criterion (b) unbreakable by construction" (V5)</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">Cross-model comparison says something specific, not "both were fine"</td>
+                            <td contenteditable="true">Four dimensions with evidence: ChatGPT's unearned "✅ under 500 ms," scope-creep columns, merged steps; Claude's honest hedge — plus the one thing ChatGPT did better (§3)</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">Final template reusable without my personal context</td>
+                            <td contenteditable="true">Fully {brace}-parameterized — dialect, schema, stakes, house example all swappable (§4)</td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true">Work is on a real task from my FL-01 audit</td>
+                            <td contenteditable="true">FL-01 Target Task 1 verbatim, including its three measurable success criteria (§1)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer>
+            <p>Week 2 &bull; Assignment 3 — Prompting Fundamentals on Real Tasks v2 &bull; Generated for FlyRank Track Evaluation</p>
+        </footer>
+
+        <div class="print-footer">
+            <span>Prepared for FlyRank Evaluation Track</span>
+            <span id="print-date"></span>
+        </div>
+    </div>
+
+    <script>
+        const themeBtn = document.getElementById('theme-btn');
+        const printBtn = document.getElementById('print-btn');
+
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            themeBtn.innerHTML = isLight
+                ? '<i class="fa-solid fa-moon"></i> Toggle Dark Theme'
+                : '<i class="fa-solid fa-sun"></i> Toggle Light Theme (for Print)';
+        });
+
+        printBtn.addEventListener('click', () => {
+            const wasLight = document.body.classList.contains('light-theme');
+            if (!wasLight) document.body.classList.add('light-theme');
+            window.print();
+            if (!wasLight) document.body.classList.remove('light-theme');
+        });
+
+        document.getElementById('print-date').textContent = "Generated on " + new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+    </script>
+</body>
+</html>
