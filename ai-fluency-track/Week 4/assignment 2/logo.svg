@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Sara Arif monogram</title>
+  <desc id="desc">The letters S and A drawn as one compact mark.</desc>
+  <rect width="128" height="128" rx="24" fill="#355E4A"/>
+  <path d="M85 35H53c-12 0-18 6-18 15s6 14 18 14h22c12 0 18 6 18 15s-6 15-18 15H35"
+        fill="none" stroke="#F4F1E8" stroke-width="11" stroke-linecap="square"/>
+  <path d="M72 94 91 35l19 59M78 76h26"
+        fill="none" stroke="#C7F36B" stroke-width="9" stroke-linejoin="miter"/>
+</svg>

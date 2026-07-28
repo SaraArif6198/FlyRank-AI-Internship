@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sara Arif's three-stack comparison and portfolio stack decision.">
+  <title>Three Roads — Sara Arif</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <div class="topbar">
+      <span>General AI Fluency · Week 4</span>
+      <span>Three Roads: Choose Your Stack with AI</span>
+      <button type="button" onclick="window.print()">Print / Save PDF</button>
+    </div>
+
+    <header class="hero">
+      <div class="hero-mark"><img src="logo.svg" alt="Sara Arif monogram"></div>
+      <div class="hero-copy">
+        <span class="eyebrow">Options, pressure, decision</span>
+        <h1 contenteditable="true">The work picked the stack.</h1>
+        <p>Three free roads could ship this portfolio. I chose the one I can maintain and that shows the proof without turning the framework into the story.</p>
+      </div>
+    </header>
+
+    <section class="summary" aria-label="Evaluator summary">
+      <article><strong>3 roads</strong><span>Genuine alternatives</span></article>
+      <article><strong>4 constraints</strong><span>Given before options</span></article>
+      <article><strong>2 weeks</strong><span>Finish window tested</span></article>
+      <article><strong>No backend</strong><span>Honest launch answer</span></article>
+    </section>
+
+    <section class="section" id="constraints">
+      <div class="section-head">
+        <div><span class="tag">01 · Constraints first</span><h2>The decision starts with the work.</h2></div>
+        <p>AI received the actual audience, content map, display needs, budget, and skill level before it named a tool.</p>
+      </div>
+      <div class="constraint-grid">
+        <article><b>Free only</b><p>Builder, repository, fonts, hosting, and deployment must work on free tiers.</p></article>
+        <article><b>Honest skill</b><p>Full-stack developer. React and Git are maintainable; over-engineering is the real risk.</p></article>
+        <article><b>Six-section path</b><p>Hero → Proof → Work → How I Work → Scope Builder → Contact.</p></article>
+        <article><b>Evidence display</b><p>Real screenshots, galleries, readable cases, demo/repository links, and occasional embeds.</p></article>
+      </div>
+      <div class="backend-call"><span>Dynamic at launch?</span><strong>Browser interaction, yes. Server persistence, no.</strong><p>The scope builder assembles a pre-filled email. There is no account, database, CMS, or stored submission.</p></div>
+    </section>
+
+    <section class="section roads" id="roads">
+      <div class="section-head">
+        <div><span class="tag">02 · Three roads</span><h2>Smallest to most powerful.</h2></div>
+        <p>All three can ship. The trade-off is where complexity appears: repeated markup, a new content framework, or package and deployment maintenance.</p>
+      </div>
+      <div class="road-grid">
+        <article class="road">
+          <span class="road-number">01</span><span class="power">Smallest</span>
+          <h3>Plain HTML<br>CSS + JS</h3>
+          <dl><div><dt>Host</dt><dd>GitHub Pages</dd></div><div><dt>Backend</dt><dd>No</dd></div></dl>
+          <p><b>Good:</b> transparent, fast, almost nothing to update.</p>
+          <p><b>Cost:</b> repeated case markup and interactive state become manual as the portfolio grows.</p>
+        </article>
+        <article class="road">
+          <span class="road-number">02</span><span class="power">Middle</span>
+          <h3>Astro<br>+ Tailwind</h3>
+          <dl><div><dt>Host</dt><dd>Cloudflare / Vercel</dd></div><div><dt>Backend</dt><dd>No</dd></div></dl>
+          <p><b>Good:</b> content-first components, fast static pages, little client JavaScript.</p>
+          <p><b>Cost:</b> migrating the live shell and learning another framework spends the build window.</p>
+        </article>
+        <article class="road chosen">
+          <span class="road-number">03</span><span class="power">Chosen</span>
+          <h3>Vite + React<br>Tailwind + Motion</h3>
+          <dl><div><dt>Host</dt><dd>Vercel</dd></div><div><dt>Backend</dt><dd>No</dd></div></dl>
+          <p><b>Good:</b> repeatable case components, responsive galleries, and scope-builder state.</p>
+          <p><b>Cost:</b> dependencies and adapters. The first Vercel build returned 404 until Nitro was configured.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section pressure" id="pressure">
+      <div class="section-head">
+        <div><span class="tag">03 · Pressure test</span><h2>The chosen road gets the hardest questions.</h2></div>
+        <p>The front-runner must survive actual delivery and display needs, not just sound familiar.</p>
+      </div>
+      <div class="pressure-grid">
+        <article><span>What breaks with the simplest?</span><h3>Not launch. Change.</h3><p>Plain HTML can ship everything essential. The drag appears when seven repeated cases and gallery behavior must stay consistent through edits.</p></article>
+        <article><span>What do I maintain?</span><h3>The adapter counts.</h3><p>Components, case data, Tailwind classes, dependencies, Git, and Vite/vinext/Nitro. The earlier Vercel 404 is the honest maintenance evidence.</p></article>
+        <article><span>Can I finish in two weeks?</span><h3>Yes—with cuts held.</h3><p>Identity, case copy, images, map, and CTA ladder already exist. No redesign, CMS, account system, or custom backend enters build week.</p></article>
+        <article><span>Does it show the work well?</span><h3>Yes, without spectacle.</h3><p>Responsive galleries, readable expanded cases, explicit demo/repo links, and restrained motion support the proof instead of upstaging it.</p></article>
+      </div>
+    </section>
+
+    <section class="section decision" id="decision">
+      <div class="section-head">
+        <div><span class="tag">04 · My decision</span><h2>React wins—with a maintenance contract.</h2></div>
+        <p>This is Sara’s rationale after the comparison and pressure test.</p>
+      </div>
+      <blockquote contenteditable="true">
+        I chose Vite + React + Tailwind CSS + Framer Motion, hosted on Vercel. Plain HTML would work, but I would maintain repeated project markup as the portfolio grows. Astro is a sensible content road, but migrating now spends the build window on a new framework instead of showing the work.
+      </blockquote>
+      <div class="decision-grid">
+        <article><span>Can I maintain this?</span><p><b>Yes.</b> React, Git, component state, and deployment configuration are within my current skill set. Every dependency change still owes me lint, a production build, and a public URL check.</p></article>
+        <article><span>Does it show my work well?</span><p><b>Yes.</b> Real screenshots, long-form proof, demo/repository links, and the scope builder get one repeatable structure.</p></article>
+        <article><span>Backend?</span><p><b>Not yet.</b> Local content plus a browser-built email covers launch. Server code arrives only with a real storage, privacy, or processing need.</p></article>
+      </div>
+    </section>
+
+    <section class="check">
+      <span>Pass / revise</span>
+      <ul><li>✓ Three genuine options</li><li>✓ Free host named</li><li>✓ Display needs tested</li><li>✓ Maintainability answered</li><li>✓ Backend: not yet</li></ul>
+    </section>
+    <footer><span>Sara Arif · 29 July 2026</span><span>Direct · Plain · Specific · Honest</span></footer>
+  </main>
+</body>
+</html>
