@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sara Arif's five-step draft, critique, and revise automation workflow.">
+  <title>Ship an Automation Workflow v2 — Sara Arif</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+  <nav class="topbar"><span>General AI Fluency · Week 4 · FL-04</span><span>Ship an Automation Workflow v2</span><button onclick="window.print()">Print / Save PDF</button></nav>
+  <header class="hero">
+    <img src="logo.svg" alt="Sara Arif monogram">
+    <div><span class="eyebrow">Draft → Critique → Revise</span><h1 contenteditable="true">Prompts write. Workflows hand off.</h1>
+    <p contenteditable="true">A reusable, source-bounded Claude Project workflow turns a fact ledger into concise portfolio copy, attacks its own claims, revises them, and stops at a human verification gate.</p></div>
+  </header>
+  <section class="metrics" aria-label="Evaluator summary">
+    <article><b>5 steps</b><span>Defined handoffs</span></article><article><b>5 runs</b><span>Real project inputs</span></article>
+    <article><b>27.7 sec</b><span>Observed AI average</span></article><article><b>1 gate</b><span>Human before publish</span></article>
+  </section>
+
+  <section class="block">
+    <div class="heading"><span>01 · Audit anchor</span><h2>One repeated writing task became a system.</h2></div>
+    <div class="split"><p>My Week 1 audit identified “drafting narrative text or documentation for research papers” as a recurring task suited to collaboration with AI. The workflow preserves that collaboration: AI structures and challenges the draft; I remain accountable for facts, permissions, and publication.</p>
+    <aside><b>Tool</b> Claude Project with structured instructions<br><b>Backend</b> None<br><b>Trigger</b> <code>RUN DCR WORKFLOW</code><br><b>Auto-publish</b> Never</aside></div>
+  </section>
+
+  <section class="block">
+    <div class="heading"><span>02 · Step diagram</span><h2>Each stage leaves an inspectable artifact.</h2></div>
+    <div class="flow">
+      <article><i>1</i><b>Gather</b><small>Input → fact ledger</small></article><em>→</em>
+      <article><i>2</i><b>Draft</b><small>Facts → cited copy</small></article><em>→</em>
+      <article><i>3</i><b>Critique</b><small>Copy → issue log</small></article><em>→</em>
+      <article><i>4</i><b>Revise</b><small>Issues → clean draft</small></article><em>→</em>
+      <article><i>5</i><b>Verify</b><small>Draft → status + gate</small></article>
+    </div>
+    <div class="rule"><b>Closed fact boundary:</b> every checkable claim must trace to a numbered <code>[F#]</code> fact. Missing evidence becomes <code>[NEEDS HUMAN FACT]</code>; it is never guessed.</div>
+  </section>
+
+  <section class="block">
+    <div class="heading"><span>03 · Configuration</span><h2>The whole build is portable, not hidden in a chat.</h2></div>
+    <div class="cards three">
+      <article><b>Project instructions</b><p>Role, voice, five-step protocol, citation rule, output schema, and stop conditions.</p><a href="workflow/CLAUDE_PROJECT_INSTRUCTIONS.md">Open full instructions</a></article>
+      <article><b>Input contract</b><p>Audience, purpose, numbered facts, constraints, and requested output format.</p><a href="workflow/INPUT_TEMPLATE.md">Open template</a></article>
+      <article><b>Run controls</b><p>Fresh-chat procedure, timer boundaries, and mandatory human checks.</p><a href="workflow/RUN_CHECKLIST.md">Open checklist</a></article>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="heading"><span>04 · Five real runs</span><h2>The critic caught a different risk each time.</h2></div>
+    <div class="runs">
+      <article><span>01 · DG Cement</span><b>Offline-first field case</b><p>Caught an implied sync algorithm that the source facts did not establish.</p><small>Human check: endpoint count and outage-loss evidence</small><a href="runs/run-01-dg-cement.md">Full run →</a></article>
+      <article><span>02 · AI Core</span><b>Text-to-SQL internship</b><p>Prevented “secure” and “complete” from overstating lexical controls.</p><small>Human check: test totals and internship disclosure</small><a href="runs/run-02-ai-core.md">Full run →</a></article>
+      <article><span>03 · AURA</span><b>Agent-state debugging</b><p>Refused to invent the exact root cause or unrecorded fix.</p><small>Human check: causal account and usage scope</small><a href="runs/run-03-aura.md">Full run →</a></article>
+      <article><span>04 · DataSage</span><b>Multi-agent analysis</b><p>Scoped the speed and stability claims to the tested public data.</p><small>Human check: dataset names and benchmark method</small><a href="runs/run-04-datasage.md">Full run →</a></article>
+      <article class="accept"><span>05 · Blind acceptance</span><b>Inventory system</b><p>Ran from a new input and removed an inferred user-interface flow.</p><small>Human check: whether alerts trigger automatic restocking</small><a href="runs/run-05-inventory.md">Full run →</a></article>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="heading"><span>05 · Honest time accounting</span><h2>Measured generation; benchmark still open.</h2></div>
+    <div class="timegrid">
+      <article><span>Observed</span><b>2m 18.7s</b><p>Batch artifact generation for all five runs.</p></article>
+      <article><span>Observed average</span><b>27.7s</b><p>AI generation per run; excludes human review.</p></article>
+      <article class="pending"><span>Still to measure</span><b>Manual baseline</b><p>Sara must time one equivalent draft and the live review pass.</p></article>
+    </div>
+    <p class="note">Illustration only: if manual writing takes 20 minutes and review/correction takes 4 minutes after 28 seconds of generation, the workflow takes about 4.5 minutes and saves about 15.5 minutes per run before setup. This is a conditional estimate, not a measured personal claim. <a href="timing_log.md">See timestamps, formula, and fillable benchmark →</a></p>
+  </section>
+
+  <section class="block">
+    <div class="heading"><span>06 · Failure map</span><h2>Automation ends where responsibility begins.</h2></div>
+    <table><thead><tr><th>Failure</th><th>Workflow response</th><th>Human must check</th></tr></thead><tbody>
+      <tr><td>Thin or ambiguous facts</td><td>Marks <code>[NEEDS HUMAN FACT]</code></td><td>Supply evidence or cut the claim</td></tr>
+      <tr><td>True fact, misleading emphasis</td><td>Critique flags distortion</td><td>Judge context and proportionality</td></tr>
+      <tr><td>Numbers, names, dates</td><td>Traces them to <code>[F#]</code></td><td>Verify against the original source</td></tr>
+      <tr><td>Confidential internship material</td><td>Cannot infer permission</td><td>Confirm disclosure and redact</td></tr>
+      <tr><td>Plausible but invented detail</td><td>Rejects unsupported claims</td><td>Inspect the final against evidence</td></tr>
+      <tr><td>Tone that is technically valid</td><td>Applies a voice card</td><td>Decide whether it still sounds like me</td></tr>
+    </tbody></table>
+  </section>
+
+  <section class="block final">
+    <div class="heading"><span>07 · Evaluation</span><h2>Built, rerun live, and ready for human release.</h2></div>
+    <div class="checks"><p>✓ Three-plus distinct steps and explicit handoffs</p><p>✓ Five documented real inputs and outputs</p><p>✓ Brand-new input acceptance run</p><p>✓ Live Claude Project run completed</p><p>✓ Known failure points and human review named</p><p>△ Personal manual benchmark remains optional evidence</p></div>
+    <p>The workflow package is complete and reproducible. Sara confirms that she configured it in Claude and completed the live end-to-end run. The measured generation time remains separate from the conditional savings illustration because no personal manual baseline was supplied.</p>
+    <div class="links"><a href="walkthrough.md">Full walkthrough</a><a href="workflow-diagram.md">Diagram source</a><a href="thread_post.md">Track thread draft</a></div>
+  </section>
+  <footer>Sara Arif · General AI Fluency · Week 4 · Assignment 3</footer>
+</main>
+</body>
+</html>
