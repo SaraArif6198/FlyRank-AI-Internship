@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sara Arif's FL-05 explainer and MCP evidence report.">
+  <title>Agent Concepts and MCP Basics — Sara Arif</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+  <nav class="topbar">
+    <span>General AI Fluency · Week 4 · FL-05</span>
+    <div><button id="edit-btn" type="button">Editing: on</button><button onclick="window.print()">Print / Save PDF</button></div>
+  </nav>
+
+  <header class="hero">
+    <div class="mark" aria-hidden="true">SA</div>
+    <div>
+      <span class="eyebrow">Agent Concepts + MCP Basics</span>
+      <h1 contenteditable="true">Tools give AI reach. Control flow decides whether it is an agent.</h1>
+      <p contenteditable="true">A plain-language classification of my FL-04 pipeline, one bounded MCP setup, and three tool calls that chat alone could not perform.</p>
+    </div>
+  </header>
+
+  <section class="summary" aria-labelledby="summary-title">
+    <div class="heading"><span>Evaluator map</span><h2 id="summary-title">Pass criteria, made inspectable.</h2></div>
+    <table>
+      <thead><tr><th>Criterion</th><th>Evidence in this report</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Agent and workflow explained accurately</td><td>Control-flow test in §§1–2</td><td><b class="pass">Ready</b></td></tr>
+        <tr><td>FL-04 classified</td><td>Fixed five-stage pipeline = workflow</td><td><b class="pass">Ready</b></td></tr>
+        <tr><td>MCP and three primitives</td><td>Tools, resources, prompts in §3</td><td><b class="pass">Ready</b></td></tr>
+        <tr><td>Three tasks show tool use</td><td>Live screenshot gallery in §5</td><td><b class="pending">Add captures</b></td></tr>
+        <tr><td>Concrete agent upgrade</td><td>Evidence-verification loop in §4</td><td><b class="pass">Ready</b></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <article class="explainer">
+    <section>
+      <div class="heading"><span>01 · The useful definition</span><h2 contenteditable="true">An agent chooses the route.</h2></div>
+      <p contenteditable="true">“Agent” should describe who controls the route, not how impressive the output sounds. A normal chat answers a prompt. A workflow may make several model calls or use tools, but its route is decided in advance. An agent receives a goal and decides what to do next: it can choose a tool, inspect the result, revise its plan, and repeat until it reaches a stopping condition or asks a human for help.</p>
+      <p contenteditable="true">That makes autonomy a design choice, not a badge. Agents are useful when the correct steps cannot be known beforehand—for example, diagnosing a fault that may require searching different files depending on what each test reveals. They also cost more time and tokens, and their flexible paths are harder to predict and evaluate. For a stable, repeatable task, a workflow is often the stronger design.</p>
+    </section>
+
+    <section>
+      <div class="heading"><span>02 · Applied to FL-04</span><h2 contenteditable="true">My pipeline is a workflow.</h2></div>
+      <p contenteditable="true">The clean test is control flow. In a <strong>workflow</strong>, the builder defines the path: step A hands to B, then C, with fixed gates. The model works inside that route. In an <strong>agent</strong>, the model directs the path while it runs. It chooses which actions are necessary from the evidence it observes.</p>
+      <div class="flow" aria-label="FL-04 fixed workflow">
+        <span>Intake</span><i>→</i><span>Draft</span><i>→</i><span>Critique</span><i>→</i><span>Revise</span><i>→</i><span>Verify</span><i>→</i><span>Human gate</span>
+      </div>
+      <p contenteditable="true">My FL-04 Draft–Critique–Revise pipeline is a <strong>workflow</strong>. Its route is fixed before any input arrives: intake builds a fact ledger; drafting produces cited copy; critique checks four named risks; revision applies the issue log; verification returns a status and a human-check list. The same five stages run in the same order. Even the final human gate is predetermined. Claude generates content inside each stage, but it cannot decide to skip drafting, inspect a source repository, run a benchmark, or invent a new verification step. A multi-step prompt is not automatically an agent.</p>
+    </section>
+
+    <section>
+      <div class="heading"><span>03 · The connection layer</span><h2 contenteditable="true">MCP standardizes access; it does not create autonomy.</h2></div>
+      <p contenteditable="true">The Model Context Protocol (MCP) is a standard way for an AI application to connect to capabilities outside the conversation. The host in my test is Codex. It connects through an MCP client to one or more servers, and each server exposes a clear interface. Instead of every AI product needing a custom integration for every file store or service, MCP gives them a shared protocol.</p>
+      <div class="primitives">
+        <article><b>Tools</b><p contenteditable="true">Executable operations the model can choose, such as reading a file, searching a directory, or creating a document.</p></article>
+        <article><b>Resources</b><p contenteditable="true">Addressable context the application can supply, such as file contents, database records, or repository history.</p></article>
+        <article><b>Prompts</b><p contenteditable="true">Reusable, user-selected instruction templates that package a known interaction.</p></article>
+      </div>
+      <p contenteditable="true">The distinction matters because MCP is plumbing, not agency. Connecting a filesystem server gives the model hands, but it does not decide how much freedom the model should have. A fixed workflow can use MCP tools, and an agent can operate without MCP through another tool interface. MCP standardizes access; the surrounding system supplies goals, permissions, control flow, and stopping rules.</p>
+      <p contenteditable="true">For my evidence setup, I connected Codex to the official Filesystem MCP server and limited it to this assignment folder. Three tests prove the connection: listing the allowed directory, reading an existing brief, and creating a new summary file. Plain chat could guess what files might contain, but it could not inspect the live directory or write a file there. The evidence must show Codex’s filesystem MCP tool call as well as the returned result; a text answer alone is not proof.</p>
+    </section>
+
+    <section>
+      <div class="heading"><span>04 · One concrete upgrade</span><h2 contenteditable="true">Add a bounded evidence-verification agent.</h2></div>
+      <p contenteditable="true">I would give it a goal—produce supportable portfolio copy—and a bounded tool set: read approved project files, search the repository, run named tests, and inspect benchmark outputs. After intake, the model would decide which claim needs checking, choose the relevant tool, observe the result, and either gather more evidence, weaken the claim, or ask me for a missing fact. It would stop only when every checkable claim had evidence or an explicit unresolved label.</p>
+      <p contenteditable="true">That changes control flow instead of merely adding another prompt. A test failure could send the agent to the implementation and then back to the test; a missing source could trigger a human question; a verified claim could proceed directly to drafting. The current critique and final human approval should remain as guardrails. File access would be allow-listed, write actions would require approval, and publishing would stay outside the agent’s permissions.</p>
+      <p contenteditable="true">The upgrade would add flexibility where FL-04 is weakest: its fact ledger checks whether copy matches supplied facts, but not whether those facts are true or current. The agent could gather live evidence. I would only accept the extra complexity if evaluation showed better claim accuracy than the simpler workflow, because autonomy is valuable when it resolves uncertainty—not when it merely makes a fixed pipeline harder to inspect.</p>
+    </section>
+  </article>
+
+  <section id="evidence">
+    <div class="heading"><span>05 · Required live proof</span><h2>Working MCP connection</h2></div>
+    <p class="callout"><strong>Required:</strong> upload the connection view and all three tasks. Each capture must show a Filesystem MCP tool call and its result—not only Codex’s prose.</p>
+    <div class="task-grid">
+      <article><small>Setup</small><b>Filesystem server connected</b><p>Server/tool list visible.</p></article>
+      <article><small>Task 1</small><b>List live directory</b><p>Tool returns real filenames.</p></article>
+      <article><small>Task 2</small><b>Read local brief</b><p>Tool returns file-only details.</p></article>
+      <article><small>Task 3</small><b>Create + read back</b><p>Write and read tools visible.</p></article>
+    </div>
+    <div class="gallery-controls">
+      <p>Use numbered filenames: <code>00-setup</code>, <code>01-list</code>, <code>02-read</code>, <code>03-create</code>.</p>
+      <button id="add-shots" type="button">Add screenshots</button>
+    </div>
+    <div id="drop-zone" class="drop-zone" role="button" tabindex="0">
+      <strong>Drop screenshots here or click to browse</strong>
+      <span>PNG/JPG/WebP · choose several at once · sorted by filename</span>
+    </div>
+    <input id="file-input" type="file" accept="image/*" multiple hidden>
+    <div id="gallery" class="gallery"></div>
+    <p class="guide-link">Follow the exact setup, prompts, privacy checks, and capture steps in <a href="mcp_setup_and_screenshots.md">mcp_setup_and_screenshots.md</a>.</p>
+  </section>
+
+  <section class="sources">
+    <div class="heading"><span>Sources read</span><h2>Primary documentation</h2></div>
+    <ul>
+      <li><a href="https://www.anthropic.com/engineering/building-effective-agents">Anthropic — Building Effective Agents</a></li>
+      <li><a href="https://modelcontextprotocol.io/docs/learn/architecture">MCP — Architecture overview</a></li>
+      <li><a href="https://modelcontextprotocol.io/specification/draft/server/index">MCP — Server primitives</a></li>
+      <li><a href="https://modelcontextprotocol.io/docs/develop/connect-local-servers">MCP — Connect to local servers</a></li>
+    </ul>
+  </section>
+
+  <footer>Sara Arif · General AI Fluency · Week 4 · Assignment 4 · FL-05</footer>
+</main>
+<script>
+  const editBtn = document.getElementById('edit-btn');
+  const editable = [...document.querySelectorAll('[contenteditable]')];
+  let editing = true;
+  editBtn.addEventListener('click', () => {
+    editing = !editing;
+    editable.forEach(el => el.contentEditable = String(editing));
+    editBtn.textContent = `Editing: ${editing ? 'on' : 'off'}`;
+  });
+
+  const input = document.getElementById('file-input');
+  const drop = document.getElementById('drop-zone');
+  const gallery = document.getElementById('gallery');
+  const add = document.getElementById('add-shots');
+  const browse = () => input.click();
+  add.addEventListener('click', browse);
+  drop.addEventListener('click', browse);
+  drop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') browse(); });
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('active'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('active'));
+  drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('active'); addFiles(e.dataTransfer.files); });
+  input.addEventListener('change', e => { addFiles(e.target.files); input.value = ''; });
+
+  function addFiles(fileList) {
+    const files = [...fileList].filter(file => file.type.startsWith('image/'))
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
+    if (!files.length) return alert('Choose PNG, JPG, or another image file.');
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => appendImage(e.target.result, file.name);
+      reader.readAsDataURL(file);
+    });
+  }
+  function appendImage(src, name) {
+    const figure = document.createElement('figure');
+    const bar = document.createElement('figcaption');
+    const label = document.createElement('b');
+    label.className = 'shot-label';
+    const filename = document.createElement('span');
+    filename.textContent = name;
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.textContent = 'Remove';
+    remove.addEventListener('click', () => { figure.remove(); renumber(); });
+    bar.append(label, filename, remove);
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = `MCP evidence: ${name}`;
+    figure.append(bar, img);
+    gallery.append(figure);
+    renumber();
+  }
+  function renumber() {
+    const figures = [...gallery.querySelectorAll('figure')];
+    figures.forEach((figure, index) => {
+      figure.querySelector('.shot-label').textContent = `MCP evidence ${index + 1} of ${figures.length}`;
+    });
+    document.body.classList.toggle('has-evidence', figures.length > 0);
+  }
+</script>
+</body>
+</html>

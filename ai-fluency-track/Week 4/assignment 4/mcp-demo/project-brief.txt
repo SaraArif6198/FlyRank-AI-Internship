@@ -1,0 +1,7 @@
+PROJECT: FL-04 Draft–Critique–Revise portfolio-copy pipeline
+FIXED STAGES: Intake, Draft, Critique, Revise, Verify & Format
+CONTROL FLOW: Every input follows the same five stages, then stops at a human approval gate.
+FACT BOUNDARY: Each checkable sentence must point to a supplied fact ID.
+UNRESOLVED EVIDENCE GAP: The workflow can check copy against supplied facts, but it cannot prove those facts are true or current.
+PUBLISHING RULE: Never auto-publish.
+
